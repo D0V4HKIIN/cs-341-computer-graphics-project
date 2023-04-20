@@ -1,3 +1,4 @@
+// example code from https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene
 import * as THREE from 'three'
 
 // instantiate scene
