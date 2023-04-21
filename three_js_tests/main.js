@@ -1,5 +1,12 @@
 // example code from https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene
 import * as THREE from 'three'
+import Stats from 'stats.js'
+
+// fps counter using stats
+const stats = new Stats()
+stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild(stats.dom)
+
 
 // instantiate scene
 const scene = new THREE.Scene();
@@ -27,6 +34,9 @@ camera.position.z = 5;
 
 // render loop
 function animate() {
+    // start of fps counter
+    stats.begin();
+    
     requestAnimationFrame(animate);
 
     cube.rotation.x += 0.01;
@@ -34,5 +44,8 @@ function animate() {
 
     // render scene
     renderer.render(scene, camera);
+
+    // end of fps counter
+    stats.end();
 }
 animate();
