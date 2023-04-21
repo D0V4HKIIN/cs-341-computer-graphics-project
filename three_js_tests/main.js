@@ -29,6 +29,14 @@ const cube_material = new THREE.MeshStandardMaterial({ color: 0x2ff22 }); // gre
 const cube = new THREE.Mesh(cube_geometry, cube_material);
 scene.add(cube);
 
+// create ground plane
+const plane_geometry = new THREE.PlaneGeometry(10, 10);
+const plane_material = new THREE.MeshBasicMaterial({ color: 0x2222ff, side: THREE.DoubleSide });
+const plane = new THREE.Mesh(plane_geometry, plane_material);
+plane.rotation.x = Math.PI / 2;
+plane.position.set(0, -5, -10);
+scene.add(plane);
+
 // add point light
 const point_light = new THREE.PointLight(0xff2222, 10, 100); // redish
 point_light.position.set(10, 10, 10);
@@ -50,6 +58,7 @@ function animate() {
 
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
+
 
     // render scene
     renderer.render(scene, camera);
