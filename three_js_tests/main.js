@@ -25,9 +25,18 @@ document.body.appendChild(renderer.domElement);
 
 // create cube
 const cube_geometry = new THREE.BoxGeometry(1, 1, 1);
-const cube_material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const cube_material = new THREE.MeshStandardMaterial({ color: 0x2ff22 }); // greenish
 const cube = new THREE.Mesh(cube_geometry, cube_material);
 scene.add(cube);
+
+// add point light
+const point_light = new THREE.PointLight(0xff2222, 10, 100); // redish
+point_light.position.set(10, 10, 10);
+scene.add(point_light);
+
+// add ambient light
+const ambient_light = new THREE.AmbientLight(0xff2222, 1, 100); // redish
+scene.add(ambient_light);
 
 // move camera because else the camera is inside the cube
 camera.position.z = 5;
@@ -36,7 +45,7 @@ camera.position.z = 5;
 function animate() {
     // start of fps counter
     stats.begin();
-    
+
     requestAnimationFrame(animate);
 
     cube.rotation.x += 0.01;
