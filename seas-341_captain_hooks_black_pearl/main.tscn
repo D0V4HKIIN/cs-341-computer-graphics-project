@@ -1,6 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://b2i7dqyf00j1s"]
+[gd_scene load_steps=8 format=3 uid="uid://ska27veo8yqj"]
 
-[ext_resource type="Shader" path="res://main.gdshader" id="1_8rr8l"]
+[ext_resource type="Shader" path="res://water.gdshader" id="1_qhy83"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_r2pty"]
 subdivide_width = 32
@@ -12,18 +12,25 @@ frequency = 0.001
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_s2oyw"]
 noise = SubResource("FastNoiseLite_ima4o")
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_qo3a3"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_dktfb"]
+as_normal_map = true
+noise = SubResource("FastNoiseLite_qo3a3")
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_m83tp"]
 render_priority = 0
-shader = ExtResource("1_8rr8l")
+shader = ExtResource("1_qhy83")
 shader_parameter/height_scale = 0.5
 shader_parameter/noise = SubResource("NoiseTexture2D_s2oyw")
+shader_parameter/normalmap = SubResource("NoiseTexture2D_dktfb")
 
 [node name="main" type="Node"]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="water_plane" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_r2pty")
 surface_material_override/0 = SubResource("ShaderMaterial_m83tp")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0334418, 1.58631, 1.53866)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.159373, 4.00254, 0.622585)
 omni_range = 5.03837
