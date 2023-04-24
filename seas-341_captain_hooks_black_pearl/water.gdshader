@@ -35,5 +35,5 @@ void fragment() {
 	RIM = 0.2;
 	METALLIC = 0.0;
 	ROUGHNESS = 0.01 * (1.0 - fresnel);
-	ALBEDO = vec3(0.01, 0.03, 0.05) + (0.1 * fresnel);
+	ALBEDO = vec3(0.1, 0.3, 0.5) + (0.1 * fresnel);
 }
