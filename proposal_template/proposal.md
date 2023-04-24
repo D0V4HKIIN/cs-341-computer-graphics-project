@@ -29,7 +29,7 @@ Extras:
  * The realistic boat-water interaction.
  * Weather simulation: rains, cloudy, lighting
 
- ![Boat-whater interaction](images/boat_with_waves.jpg){width="500px"}
+ ![Boat-water interaction](images/boat_with_waves.jpg){width="500px"}
 
 
 # Schedule
@@ -40,7 +40,7 @@ All members will work on different parts of the project, the allocation is just 
 
  * Project proposal review, change project deliverables if needed after feedback, read on related papers and new framework.
 
-    Work allocation: The whole team.
+Work allocation: The whole team.
 
 ## Week 2: 1-7 May
 
@@ -49,10 +49,10 @@ All members will work on different parts of the project, the allocation is just 
  * A boat with simple steering
  * Have a first result
 
-  Work allocation:<br>
-    All members collaborate to get a nice result.<br>
-    Jonas works on the boat.<br>
-    The rest work on the wave generation.<br>
+Work allocation:<br>
+  All members collaborate to get a nice result.<br>
+  Jonas works on the boat.<br>
+  The rest work on the wave generation.
 
 ## Week 3: 8-14 May
 
@@ -61,12 +61,11 @@ All members will work on different parts of the project, the allocation is just 
  * Boat physics (realistic buyancy)
 
 Work allocation:<br>
-Core part: all members<br>
-Boat: Jonas<br>
-UI: Jonas<br>
-Weather Simulation: Toni<br>
-Water Foam: Nephele<br>
-
+  Core part: all members<br>
+  Boat: Jonas<br>
+  UI: Jonas<br>
+  Weather Simulation: Toni<br>
+  Water Foam: Nephele
 
 ## Week 4: 15-21 May
 
@@ -78,14 +77,21 @@ Water Foam: Nephele<br>
 
 ## Week 6: 29 May - 4 June
 
-* Make video, everyobody works to finalize report.
+ * Make video, everyobody works to finalize report.
 
 # Resources
 
-We consider making the demo in Godot, an open-source game engine.
-
+We consider making the demo in Godot, an open-source game engine.<br>
 We believe that in order to make our project look really realistic and interactive, we need a solid framework.
 
-Some research we have done:
+## Research
 
- *
+ * https://www.cg.tuwien.ac.at/research/publications/2018/GAMPER-2018-OSG/
+ * https://www.cse.chalmers.se/edu/course/TDA362/tutorials/heightfield.html
+ * https://arm-software.github.io/opengl-es-sdk-for-android/ocean_f_f_t.html	
+ * https://www.youtube.com/watch?v=VSwVwIYEypY
+ * https://www.youtube.com/watch?v=kGEqaX4Y4bQ
+ * https://www.youtube.com/watch?v=lo8YwUkO9zQ
+ * https://en.wikipedia.org/wiki/Boids
+ * https://www.youtube.com/watch?v=7KGQ9NC4uGk
+ * https://www.youtube.com/watch?v=oosFrxF30Pk
