@@ -31,10 +31,13 @@ shader_parameter/normalmap = SubResource("NoiseTexture2D_dktfb")
 
 [node name="main" type="Node"]
 
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.871214, 0.490904, 0, -0.490904, 0.871214, 0, 1.733, 5.573)
+
 [node name="water_plane" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_r2pty")
 surface_material_override/0 = SubResource("ShaderMaterial_m83tp")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.03673, 1.90529, -2.40938)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.03673, 0.609602, -3.16467)
 omni_range = 12.6448
