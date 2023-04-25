@@ -1,35 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://ska27veo8yqj"]
+[gd_scene load_steps=5 format=3 uid="uid://ska27veo8yqj"]
 
 [ext_resource type="Script" path="res://DefaultCamera.gd" id="1_far80"]
-[ext_resource type="Shader" path="res://water.gdshader" id="1_qhy83"]
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_r2pty"]
-size = Vector2(10, 10)
-subdivide_width = 100
-subdivide_depth = 100
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_ima4o"]
-frequency = 0.003
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_s2oyw"]
-seamless = true
-noise = SubResource("FastNoiseLite_ima4o")
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_qo3a3"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_dktfb"]
-seamless = true
-as_normal_map = true
-bump_strength = 6.0
-noise = SubResource("FastNoiseLite_qo3a3")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_m83tp"]
-render_priority = 0
-shader = ExtResource("1_qhy83")
-shader_parameter/normal_mix = 0.1
-shader_parameter/height_scale = 0.5
-shader_parameter/noise = SubResource("NoiseTexture2D_s2oyw")
-shader_parameter/normalmap = SubResource("NoiseTexture2D_dktfb")
+[ext_resource type="PackedScene" uid="uid://dc5rrghert7q2" path="res://boat.tscn" id="3_jaqp4"]
+[ext_resource type="Script" path="res://boat.gd" id="4_dnxvs"]
+[ext_resource type="PackedScene" uid="uid://dpd0lkuf2k0vb" path="res://water.tscn" id="4_s3snh"]
 
 [node name="main" type="Node"]
 
@@ -37,9 +11,10 @@ shader_parameter/normalmap = SubResource("NoiseTexture2D_dktfb")
 transform = Transform3D(1, 0, 0, 0, 0.871214, 0.490904, 0, -0.490904, 0.871214, 0, 1.733, 5.573)
 script = ExtResource("1_far80")
 
-[node name="water_plane" type="MeshInstance3D" parent="."]
-mesh = SubResource("PlaneMesh_r2pty")
-surface_material_override/0 = SubResource("ShaderMaterial_m83tp")
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.449319, 0.754298, 0.478692, 0, -0.535827, 0.844328, 0.893371, -0.379373, -0.240757, 0, 2.898, 0)
+
+[node name="boat" parent="." instance=ExtResource("3_jaqp4")]
+script = ExtResource("4_dnxvs")
+
+[node name="water" parent="." instance=ExtResource("4_s3snh")]

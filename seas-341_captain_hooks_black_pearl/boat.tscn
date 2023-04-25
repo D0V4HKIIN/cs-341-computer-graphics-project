@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://dc5rrghert7q2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ahewb"]
+size = Vector3(3, 1, 1.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_mfw14"]
+size = Vector3(3, 1, 1.5)
+
+[node name="boat" type="CharacterBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_ahewb")
+
+[node name="pivot" type="Node3D" parent="."]
+
+[node name="boatMesh" type="MeshInstance3D" parent="pivot"]
+mesh = SubResource("BoxMesh_mfw14")
