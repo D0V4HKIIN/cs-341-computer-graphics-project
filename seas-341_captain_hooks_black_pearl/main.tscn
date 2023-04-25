@@ -1,18 +1,35 @@
-[gd_scene load_steps=5 format=3 uid="uid://ska27veo8yqj"]
+[gd_scene load_steps=8 format=3 uid="uid://ska27veo8yqj"]
 
 [ext_resource type="Script" path="res://DefaultCamera.gd" id="1_far80"]
-[ext_resource type="PackedScene" path="res://boat.tscn" id="3_jaqp4"]
+[ext_resource type="PackedScene" uid="uid://dc5rrghert7q2" path="res://boat.tscn" id="3_jaqp4"]
 [ext_resource type="Script" path="res://boat.gd" id="4_dnxvs"]
-[ext_resource type="PackedScene" path="res://water.tscn" id="4_s3snh"]
+[ext_resource type="PackedScene" uid="uid://dpd0lkuf2k0vb" path="res://water.tscn" id="4_s3snh"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1j8ng"]
+sky_top_color = Color(0.341176, 0.67451, 0.92549, 1)
+sky_horizon_color = Color(0.635294, 0.710878, 0.764623, 1)
+ground_horizon_color = Color(0.635294, 0.710878, 0.764623, 1)
+
+[sub_resource type="Sky" id="Sky_0uvdm"]
+sky_material = SubResource("ProceduralSkyMaterial_1j8ng")
+
+[sub_resource type="Environment" id="Environment_ww4o1"]
+background_mode = 2
+sky = SubResource("Sky_0uvdm")
+tonemap_mode = 2
 
 [node name="main" type="Node"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ww4o1")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.341637, 0.365081, 0, 0.730162, 0.683274, -0.5, 0.591732, -0.632339, 0, 0, 0)
+shadow_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.871214, 0.490904, 0, -0.490904, 0.871214, 0, 1.733, 5.573)
 script = ExtResource("1_far80")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.449319, 0.754298, 0.478692, 0, -0.535827, 0.844328, 0.893371, -0.379373, -0.240757, 0, 2.898, 0)
 
 [node name="boat" parent="." instance=ExtResource("3_jaqp4")]
 script = ExtResource("4_dnxvs")
