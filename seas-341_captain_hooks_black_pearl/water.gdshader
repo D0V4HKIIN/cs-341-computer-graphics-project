@@ -31,10 +31,11 @@ void vertex() {
 }
 
 void fragment() {
-	// mix noise and some random normalmap for nice sun reflections
-	vec3 real_normal = texture(noise, tex_position).xyz;
 	vec3 normal_noise = texture(normalmap, tex_position).xyz;
-	NORMAL_MAP = mix(normal_noise, real_normal, normal_mix);
+	NORMAL_MAP = normal_noise;
+	// mix noise and some random normalmap for nice sun reflections
+	// vec3 real_normal = texture(noise, tex_position).xyz;
+	// NORMAL_MAP = mix(normal_noise, real_normal, normal_mix);
 	// NORMAL_MAP = normalize(real_normal + normal_noise); // should be more realistic but looks worse
 	
 	// normal water material
