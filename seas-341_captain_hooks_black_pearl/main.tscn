@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://ska27veo8yqj"]
 
 [ext_resource type="Script" path="res://DefaultCamera.gd" id="1_far80"]
-[ext_resource type="PackedScene" uid="uid://dc5rrghert7q2" path="res://boat.tscn" id="3_jaqp4"]
+[ext_resource type="PackedScene" path="res://boat.tscn" id="3_jaqp4"]
 [ext_resource type="Script" path="res://boat.gd" id="4_dnxvs"]
-[ext_resource type="PackedScene" uid="uid://dpd0lkuf2k0vb" path="res://water.tscn" id="4_s3snh"]
+[ext_resource type="PackedScene" path="res://water.tscn" id="4_s3snh"]
 
 [node name="main" type="Node"]
 

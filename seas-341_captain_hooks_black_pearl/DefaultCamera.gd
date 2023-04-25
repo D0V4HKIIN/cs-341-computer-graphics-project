@@ -2,9 +2,7 @@ extends Camera3D
 
 @export var SHIFT_MULTIPLIER = 2.5
 @export var SPEED = 2
-@export var SENSITIVITY = 0.2
-
-var _total_pitch = 0.0
+@export var SENSITIVITY = 0.002
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -14,8 +12,8 @@ func _input(event):
 	# Receives mouse motion
 	if event is InputEventMouseMotion and Input.is_action_pressed("move_camera"):
 		var mouse_movement = event.relative * SENSITIVITY
-		rotate_y(deg_to_rad(-mouse_movement.x))
-		rotate_object_local(Vector3(1,0,0), deg_to_rad(-mouse_movement.y))
+		rotate_y(-mouse_movement.x)
+		rotate_object_local(Vector3(1,0,0), -mouse_movement.y)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
