@@ -1,7 +1,9 @@
 shader_type spatial;
 render_mode specular_toon;
 
+uniform float normal_mix = 0.1;
 uniform float height_scale = 0.5;
+
 uniform sampler2D noise;
 uniform sampler2D normalmap;
 
@@ -29,8 +31,13 @@ void vertex() {
 }
 
 void fragment() {
-	NORMAL_MAP = texture(normalmap, tex_position).xyz;
+	// mix noise and some random normalmap for nice sun reflections
+	vec3 real_normal = texture(noise, tex_position).xyz;
+	vec3 normal_noise = texture(normalmap, tex_position).xyz;
+	NORMAL_MAP = mix(normal_noise, real_normal, normal_mix);
+	// NORMAL_MAP = normalize(real_normal + normal_noise); // should be more realistic but looks worse
 	
+	// normal water material
 	float fresnel = sqrt(1.0 - dot(NORMAL, VIEW));
 	RIM = 0.2;
 	METALLIC = 0.0;
