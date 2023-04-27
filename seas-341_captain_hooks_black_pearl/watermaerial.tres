@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://djkd0lj43k50q"]
+[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://bt50yl4lst65c"]
 
 [ext_resource type="Shader" path="res://water.gdshader" id="1_whmqm"]
 
@@ -20,6 +20,6 @@ noise = SubResource("FastNoiseLite_mhybr")
 [resource]
 render_priority = 0
 shader = ExtResource("1_whmqm")
-shader_parameter/height_scale = 0.5
+shader_parameter/height_scale = 2.0
 shader_parameter/noise = SubResource("NoiseTexture2D_s2oyw")
 shader_parameter/normalmap = SubResource("NoiseTexture2D_dktfb")

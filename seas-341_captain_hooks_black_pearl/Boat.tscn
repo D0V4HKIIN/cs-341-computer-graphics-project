@@ -15,3 +15,6 @@ shape = SubResource("BoxShape3D_ahewb")
 
 [node name="boatMesh" type="MeshInstance3D" parent="pivot"]
 mesh = SubResource("BoxMesh_mfw14")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-4.37114e-08, -0.173648, 0.984808, 0, 0.984808, 0.173648, -1, 7.5904e-09, -4.30473e-08, 3.82971, 1.65738, 0)

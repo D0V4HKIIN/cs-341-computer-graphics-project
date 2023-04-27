@@ -15,14 +15,11 @@ func _physics_process(delta):
 		velocity.y -= gravity * delta
 
 	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir = Input.get_vector("boat_forward", "boat_back", "boat_left", "boat_right").normalized()
-	if input_dir:
-		rotate_y(-input_dir.y * ROTATION_SPEED)
-		velocity.x = input_dir.x * SPEED * cos(-global_rotation.y)
-		velocity.z = input_dir.x * SPEED * sin(-global_rotation.y)
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+
+	# rotate and set speed accordingly
+	rotate_y(-input_dir.y * ROTATION_SPEED)
+	velocity.x = input_dir.x * SPEED * cos(-global_rotation.y)
+	velocity.z = input_dir.x * SPEED * sin(-global_rotation.y)
 
 	move_and_slide()
