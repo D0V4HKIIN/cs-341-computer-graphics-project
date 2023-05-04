@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://dpd0lkuf2k0vb"]
+[gd_scene load_steps=3 format=3 uid="uid://cng3sv2fqmgje"]
 
-[ext_resource type="Material" uid="uid://bt50yl4lst65c" path="res://watermaerial.tres" id="1_dychj"]
+[ext_resource type="Material" path="res://water_noise_based_material.tres" id="1_2605e"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_triiu"]
 size = Vector2(10, 10)
@@ -9,4 +9,4 @@ subdivide_depth = 49
 
 [node name="Water" type="MeshInstance3D"]
 mesh = SubResource("PlaneMesh_triiu")
-surface_material_override/0 = ExtResource("1_dychj")
+surface_material_override/0 = ExtResource("1_2605e")

@@ -1,8 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://vqwdgpeqmylb"]
+[gd_scene load_steps=9 format=3 uid="uid://vqwdgpeqmylb"]
 
 [ext_resource type="Script" path="res://DefaultCamera.gd" id="1_far80"]
-[ext_resource type="PackedScene" uid="uid://dc5rrghert7q2" path="res://boat.tscn" id="3_jaqp4"]
-[ext_resource type="Script" path="res://Boat.gd" id="3_uk3wb"]
+[ext_resource type="PackedScene" uid="uid://dauvp4g2i071q" path="res://Boat.tscn" id="3_jaqp4"]
 [ext_resource type="PackedScene" uid="uid://dsy0g7e3hkkfg" path="res://Ocean.tscn" id="4_f5de0"]
 [ext_resource type="Script" path="res://Panel.gd" id="5_dsiau"]
 [ext_resource type="PackedScene" uid="uid://cmhqa30lx5onx" path="res://settings2.tscn" id="6_ceydy"]
@@ -30,12 +29,11 @@ transform = Transform3D(-0.866025, -0.341637, 0.365081, 0, 0.730162, 0.683274, -
 shadow_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.871214, 0.490904, 0, -0.490904, 0.871214, 0, 1.733, 5.573)
+transform = Transform3D(1, 0, 0, 0, 0.820681, 0.571387, 0, -0.571387, 0.820681, 0, 17.3083, 21.6586)
 script = ExtResource("1_far80")
 
 [node name="Boat" parent="." instance=ExtResource("3_jaqp4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.230931, 1.78165, 0.0293784)
-script = ExtResource("3_uk3wb")
 
 [node name="Ocean" parent="." instance=ExtResource("4_f5de0")]
 transform = Transform3D(6, 0, 0, 0, 1, 0, 0, 0, 6, 0, 0, 0)
