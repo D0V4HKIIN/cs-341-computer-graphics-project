@@ -1,6 +1,6 @@
 extends Camera3D
 
-@export var SHIFT_MULTIPLIER = 2.5
+@export var SHIFT_MULTIPLIER = 3.5
 @export var SPEED = 2
 @export var SENSITIVITY = 0.002
 

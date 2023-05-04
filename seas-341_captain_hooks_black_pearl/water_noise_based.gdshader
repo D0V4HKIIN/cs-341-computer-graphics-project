@@ -2,6 +2,8 @@ shader_type spatial;
 render_mode specular_toon;
 
 uniform float height_scale = 2.0;
+uniform vec2 water_displacement; // to simulate the water without actually moving the boat
+uniform float cpu_time; // so that we have the same time in gpu and cpu
 
 uniform sampler2D noise;
 uniform sampler2D normalmap;
@@ -28,16 +30,16 @@ float height(vec2 position, float time) {
 
 void vertex() {
 	vec3 world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	tex_position = world_pos.xz / 2.0 + TIME * 0.05;
+	tex_position = world_pos.xz / 2.0 + cpu_time * 0.05 + water_displacement;
 	
 	vertex_distance = distance(world_pos, vec3(0.0));
 	vertex_distance = clamp(vertex_distance, 0.0, 85.0);
 	vertex_distance_clamped = vertex_distance / 85.0;
 	
-	float h = height(tex_position, TIME);
+	float h = height(tex_position, cpu_time);
 	VERTEX.y += h * height_scale * (1.0 - vertex_distance_clamped);
 
-	NORMAL = normalize(vec3(h - height(tex_position + vec2(0.1, 0.0), TIME), 0.1, h - height(tex_position + vec2(0.0, 0.1), TIME)));
+	NORMAL = normalize(vec3(h - height(tex_position + vec2(0.1, 0.0), cpu_time), 0.1, h - height(tex_position + vec2(0.0, 0.1), cpu_time)));
 }
 
 void fragment() {

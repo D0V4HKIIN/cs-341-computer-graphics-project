@@ -1,4 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://dc5rrghert7q2"]
+[gd_scene load_steps=4 format=3 uid="uid://dauvp4g2i071q"]
+
+[ext_resource type="Script" path="res://Boat.gd" id="1_gtp0f"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ahewb"]
 size = Vector3(3, 1, 1.5)
@@ -6,15 +8,35 @@ size = Vector3(3, 1, 1.5)
 [sub_resource type="BoxMesh" id="BoxMesh_mfw14"]
 size = Vector3(3, 1, 1.5)
 
-[node name="boat" type="CharacterBody3D"]
+[node name="boat" type="RigidBody3D"]
+script = ExtResource("1_gtp0f")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_ahewb")
 
-[node name="pivot" type="Node3D" parent="."]
+[node name="floaters" type="Node3D" parent="."]
 
-[node name="boatMesh" type="MeshInstance3D" parent="pivot"]
-mesh = SubResource("BoxMesh_mfw14")
+[node name="floater" type="Marker3D" parent="floaters"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, -0.5, 0.85)
+
+[node name="floater2" type="Marker3D" parent="floaters"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, -0.5, -0.85)
+
+[node name="floater3" type="Marker3D" parent="floaters"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, -0.5, -0.85)
+
+[node name="floater4" type="Marker3D" parent="floaters"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, -0.5, 0.85)
+
+[node name="floater5" type="Marker3D" parent="floaters"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0.85)
+
+[node name="floater6" type="Marker3D" parent="floaters"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, -0.85)
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(-4.37114e-08, -0.173648, 0.984808, 0, 0.984808, 0.173648, -1, 7.5904e-09, -4.30473e-08, 3.82971, 1.65738, 0)
+
+[node name="boatMesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_mfw14")
+skeleton = NodePath("../floaters")

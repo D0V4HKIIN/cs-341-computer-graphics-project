@@ -1,6 +1,6 @@
-[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://bt50yl4lst65c"]
+[gd_resource type="ShaderMaterial" load_steps=6 format=3]
 
-[ext_resource type="Shader" path="res://water.gdshader" id="1_whmqm"]
+[ext_resource type="Shader" path="res://water_noise_based.gdshader" id="1_whmqm"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_o2bg8"]
 frequency = 0.003
