@@ -14,10 +14,6 @@ func _process(delta):
 	pass
 
 func _on_h_slider_value_changed(value):
-	print(value)
-	var ocean = get_node("../Ocean")
-	print(ocean.find_children("Water"))
-	print(ocean.get_children())
 	for water in get_tree().get_nodes_in_group("Water"):
 		water.get_active_material(0).set("shader_param/height_scale", value);
 
