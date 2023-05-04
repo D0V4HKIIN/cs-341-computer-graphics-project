@@ -1,11 +1,9 @@
 [gd_scene load_steps=4 format=3 uid="uid://dauvp4g2i071q"]
 
 [ext_resource type="Script" path="res://Boat.gd" id="1_gtp0f"]
+[ext_resource type="ArrayMesh" uid="uid://bomnupby41ikr" path="res://boat.obj" id="2_bscb6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ahewb"]
-size = Vector3(3, 1, 1.5)
-
-[sub_resource type="BoxMesh" id="BoxMesh_mfw14"]
 size = Vector3(3, 1, 1.5)
 
 [node name="boat" type="RigidBody3D"]
@@ -34,9 +32,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0.85)
 [node name="floater6" type="Marker3D" parent="floaters"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, -0.85)
 
+[node name="floater7" type="Marker3D" parent="floaters"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
+
+[node name="floater8" type="Marker3D" parent="floaters"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
+
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(-4.37114e-08, -0.173648, 0.984808, 0, 0.984808, 0.173648, -1, 7.5904e-09, -4.30473e-08, 3.82971, 1.65738, 0)
 
 [node name="boatMesh" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_mfw14")
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+mesh = ExtResource("2_bscb6")
 skeleton = NodePath("../floaters")
