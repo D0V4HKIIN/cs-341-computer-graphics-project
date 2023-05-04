@@ -1,9 +1,5 @@
 extends Control
 
-# settings
-@onready var SPEED = $MarginContainer/VBoxContainer/HSlider
-@onready var tickbox = $MarginContainer/VBoxContainer/CheckBox
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
