@@ -1,0 +1,60 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmhqa30lx5onx"]
+
+[ext_resource type="Script" path="res://settings2.gd" id="1_husos"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_top = 48.0
+offset_right = -811.0
+offset_bottom = -347.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_husos")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -17.0
+offset_top = -51.0
+offset_right = 5.0
+offset_bottom = -139.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Hello"
+
+[node name="HSlider" type="HSlider" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+value = 10.0
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_stretch_ratio = 5.0
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Label vol 2"
+
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = " Check here for noise"
+
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/HSlider" to="." method="_on_h_slider_value_changed"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/CheckBox" to="." method="_on_check_box_toggled"]
