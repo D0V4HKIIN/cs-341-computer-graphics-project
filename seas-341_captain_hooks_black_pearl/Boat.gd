@@ -1,8 +1,8 @@
 extends CharacterBody3D
 
 
-#@export var SPEED = 10.0
-var SPEED = $Panel/HBoxContainer2/HSlider.value
+@export var SPEED = 10.0
+#var SPEED = $Panel/HBoxContainer2/HSlider.value
 @export var ROTATION_SPEED = 0.03
 @export var JUMP_VELOCITY = 4.5
 

@@ -1,11 +1,11 @@
 [gd_scene load_steps=10 format=3 uid="uid://vqwdgpeqmylb"]
 
 [ext_resource type="Script" path="res://DefaultCamera.gd" id="1_far80"]
-[ext_resource type="PackedScene" uid="uid://dc5rrghert7q2" path="res://boat.tscn" id="3_jaqp4"]
+[ext_resource type="PackedScene" uid="uid://dc5rrghert7q2" path="res://Boat.tscn" id="3_jaqp4"]
 [ext_resource type="Script" path="res://Boat.gd" id="3_uk3wb"]
 [ext_resource type="PackedScene" uid="uid://dsy0g7e3hkkfg" path="res://Ocean.tscn" id="4_f5de0"]
 [ext_resource type="Script" path="res://Panel.gd" id="5_dsiau"]
-[ext_resource type="PackedScene" uid="uid://cmhqa30lx5onx" path="res://settings2.tscn" id="6_ceydy"]
+[ext_resource type="PackedScene" path="res://settings2.tscn" id="6_ceydy"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1j8ng"]
 sky_top_color = Color(0.341176, 0.67451, 0.92549, 1)

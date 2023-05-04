@@ -26,7 +26,7 @@ func createOcean():
 		waterInstance.mesh.set_subdivide_width(tileSubdivision);
 		waterInstance.mesh.set_subdivide_depth(tileSubdivision);
 		waterInstance.set_scale(Vector3(tileScale, 1.0, tileScale)); # Ignore Y value because planes are 2d
-
+		waterInstance.add_to_group("Water"); # to get the water meshes in the ui
 # called when scene is instanciated
 func _ready():
 	createOcean();
