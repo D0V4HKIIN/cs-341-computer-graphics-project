@@ -36,6 +36,11 @@ SPEED = 4
 
 [node name="Boat" parent="." instance=ExtResource("3_jaqp4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.230931, 1.33139, 0.0293784)
+float_force = 55
+water_drag = 0.05
+water_angular_drag = 0.05
+SPEED = 0.1
+ROTATION_SPEED = 0.02
 
 [node name="Ocean" parent="." instance=ExtResource("4_f5de0")]
 transform = Transform3D(6, 0, 0, 0, 1, 0, 0, 0, 6, 0, 0, 0)
