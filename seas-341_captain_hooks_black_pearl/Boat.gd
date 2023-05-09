@@ -48,7 +48,12 @@ func texture(noise, position):
 							positive_modulo(int(position.y / 10.0 * noise.get_height()), noise.get_height()))
 
 func wave(position):
-	position += Vector2.ONE * (texture(noise, position).r * 2.0 - 1.0);
+	var uv_x = wrapf(position.x / 10.0, 0, 1)
+	var uv_y = wrapf(position.y / 10.0, 0, 1)
+	var pixel_pos = Vector2(uv_x * noise.get_width(), uv_y * noise.get_height())
+
+	position += Vector2.ONE * (noise.get_pixelv(pixel_pos).r * 2.0 - 1.0);
+	
 	var wv = Vector2.ONE - Vector2(abs(sin(position.x)), abs(sin(position.y)));
 	return pow(1.0 - pow(wv.x * wv.y, 0.65), 4.0);
 
@@ -82,10 +87,14 @@ func _physics_process(delta):
 	for water in get_tree().get_nodes_in_group("Water"):
 		water.get_active_material(0).set("shader_parameter/water_displacement", boat_position_in_water);
 	
+	# some nice debug code
+	#var water_height = get_water_height(Vector2(global_position.x, global_position.z) / 2  + Vector2.ONE * time * 0.05 + boat_position_in_water)
+	#global_position.y = water_height;
+	
 	# buoyancy approximation
 	submerged = false
 	for floater in floaters:
-		var depth = get_water_height(Vector2(floater.global_position.x, floater.global_position.z) + boat_position_in_water) - floater.global_position.y 
+		var depth = get_water_height(Vector2(global_position.x, global_position.z) / 2  + Vector2.ONE * time * 0.05 + boat_position_in_water) - floater.global_position.y 
 		if depth > 0:
 			submerged = true
 			apply_force(Vector3.UP * float_force * gravity * sqrt(depth), floater.global_position - global_position)
