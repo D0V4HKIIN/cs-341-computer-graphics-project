@@ -1,11 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://dsy0g7e3hkkfg"]
+[gd_scene load_steps=2 format=3 uid="uid://dsy0g7e3hkkfg"]
 
 [ext_resource type="Script" path="res://Ocean.gd" id="1_m64pf"]
 
-[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_rg7rt"]
-
-[node name="Ocean" type="StaticBody3D"]
+[node name="Ocean" type="Node3D"]
 script = ExtResource("1_m64pf")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("WorldBoundaryShape3D_rg7rt")
