@@ -24,7 +24,9 @@ func _ready():
 	print(water_noise);
 
 
-var time = 0.0
+var time = 0.0;
+var submerged = false;
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	time += delta
@@ -74,7 +76,14 @@ func _physics_process(delta):
 		water.get_active_material(0).set("shader_parameter/water_displacement", boat_position_in_water);
 	
 	# buoyancy approximation
+	submerged = false
 	for floater in floaters:
 		var depth = get_water_height(Vector2(floater.global_position.x, floater.global_position.z) + boat_position_in_water) - floater.global_position.y 
 		if depth > 0:
-			apply_force(Vector3.UP * float_force * gravity * sqrt(depth) * (1 - water_drag), floater.global_position - global_position)
+			submerged = true
+			apply_force(Vector3.UP * float_force * gravity * depth, floater.global_position - global_position)
+			
+func _integrate_forces(state: PhysicsDirectBodyState3D):
+	if submerged:
+		state.linear_velocity *=  1 - water_drag
+		state.angular_velocity *= 1 - water_angular_drag 
