@@ -7,6 +7,12 @@ extends Node3D
 var waterTile = preload("res://Water.tscn"); 
 var spawnPoint = preload("res://OceanGridSpawnInfo.tres");
 
+# Random
+var rng = RandomNumberGenerator.new();
+var random_number_xi;
+
+
+
 # creates a bunch of water tiles and sets the position, subdivision and scale
 func createOcean():
 	for i in spawnPoint.spawnPoints.size():
@@ -30,4 +36,8 @@ func createOcean():
 		waterInstance.add_to_group("Water"); # to get the water meshes in the ui
 # called when scene is instanciated
 func _ready():
+	seed(1);
+	random_number_xi = rng.randfn();
+	
+	
 	createOcean();
