@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://dpa3ik4wjcry8"]
+[gd_resource type="ShaderMaterial" load_steps=6 format=3 uid="uid://b1gtctiurxrj8"]
 
 [ext_resource type="Shader" path="res://water_noise_based.gdshader" id="1_whmqm"]
 
