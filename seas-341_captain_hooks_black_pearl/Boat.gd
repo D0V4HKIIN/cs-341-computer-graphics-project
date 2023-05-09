@@ -1,7 +1,7 @@
 extends RigidBody3D
 
-@export var float_force := 35
-@export var water_drag := 0.3
+@export var float_force := 55
+@export var water_drag := 0.05
 @export var water_angular_drag := 0.05
 
 @export var SPEED = 0.1
@@ -40,8 +40,15 @@ func _process(delta):
 	if scale_param != null:
 		height_scale = scale_param;
 
+func positive_modulo(a, mod):
+	return ((a % mod) + mod) % mod;
+
+func texture(noise, position):
+	return noise.get_pixel(positive_modulo(int(position.x / 10.0 * noise.get_width()), noise.get_width()),
+							positive_modulo(int(position.y / 10.0 * noise.get_height()), noise.get_height()))
+
 func wave(position):
-	position += Vector2.ONE * (noise.get_pixel(position.x / 10.0, position.y / 10.0).r * 2.0 - 1.0);
+	position += Vector2.ONE * (texture(noise, position).r * 2.0 - 1.0);
 	var wv = Vector2.ONE - Vector2(abs(sin(position.x)), abs(sin(position.y)));
 	return pow(1.0 - pow(wv.x * wv.y, 0.65), 4.0);
 
@@ -81,7 +88,7 @@ func _physics_process(delta):
 		var depth = get_water_height(Vector2(floater.global_position.x, floater.global_position.z) + boat_position_in_water) - floater.global_position.y 
 		if depth > 0:
 			submerged = true
-			apply_force(Vector3.UP * float_force * gravity * depth, floater.global_position - global_position)
+			apply_force(Vector3.UP * float_force * gravity * sqrt(depth), floater.global_position - global_position)
 			
 func _integrate_forces(state: PhysicsDirectBodyState3D):
 	if submerged:
