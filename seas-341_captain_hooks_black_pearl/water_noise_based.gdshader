@@ -21,11 +21,11 @@ float wave(vec2 position){
 }
 
 float height(vec2 position, float time) {
-  float d = wave((position + time) * 0.4) * 0.3;
-  d += wave((position - time) * 0.3) * 0.3;
-  d += wave((position + time) * 0.5) * 0.2;
-  d += wave((position - time) * 0.6) * 0.2;
-  return d;
+	float d = wave((position + time) * 0.4) * 0.3;
+	d += wave((position - time) * 0.3) * 0.3;
+	d += wave((position + time) * 0.5) * 0.2;
+	d += wave((position - time) * 0.6) * 0.2;
+	return d;
 }
 
 void vertex() {

@@ -33,7 +33,7 @@ transform = Transform3D(1, 0, 0, 0, 0.820681, 0.571387, 0, -0.571387, 0.820681, 
 script = ExtResource("1_far80")
 
 [node name="Boat" parent="." instance=ExtResource("3_jaqp4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.230931, 1.78165, 0.0293784)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.230931, 4.33139, 0.0293784)
 
 [node name="Ocean" parent="." instance=ExtResource("4_f5de0")]
 transform = Transform3D(6, 0, 0, 0, 1, 0, 0, 0, 6, 0, 0, 0)
