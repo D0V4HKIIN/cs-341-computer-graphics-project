@@ -9,6 +9,7 @@ size = Vector3(3, 1, 1.5)
 
 [node name="boat" type="RigidBody3D"]
 mass = 100.0
+inertia = Vector3(200, 200, 200)
 script = ExtResource("1_gtp0f")
 water_noise = ExtResource("2_1r42p")
 

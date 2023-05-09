@@ -17,6 +17,8 @@ var height_scale = 2;
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	var ocean = $"../Ocean"
+	ocean.createOcean();
 	await water_noise.changed
 	noise = water_noise.get_image();
 	print(water_noise);
@@ -76,3 +78,4 @@ func _physics_process(delta):
 		var depth = get_water_height(Vector2(floater.global_position.x, floater.global_position.z) + boat_position_in_water) - floater.global_position.y 
 		if depth > 0:
 			apply_force(Vector3.UP * float_force * gravity * sqrt(depth) * (1 - water_drag), floater.global_position - global_position)
+			4
