@@ -8,10 +8,15 @@
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <link rel="stylesheet" href="icg_report.css" />
@@ -58,8 +63,8 @@ will be interactive boat movement and different wave generation.</p>
 </ul>
 <figure>
 <img src="images/boat_with_waves.jpg" width="500"
-alt="Boat-whater interaction" />
-<figcaption aria-hidden="true">Boat-whater interaction</figcaption>
+alt="Boat-water interaction" />
+<figcaption aria-hidden="true">Boat-water interaction</figcaption>
 </figure>
 <h1 id="schedule">Schedule</h1>
 <p>All members will work on different parts of the project, the
@@ -105,18 +110,78 @@ Jonas<br> Weather Simulation: Toni<br> Water Foam: Nephele</p>
 <p>We consider making the demo in Godot, an open-source game engine.<br>
 We believe that in order to make our project look really realistic and
 interactive, we need a solid framework.</p>
+<h1 id="milestone-report-12052023">Milestone Report 12/05/2023</h1>
+<h2 id="curent-state-of-project">Curent state of project</h2>
+<p>We have accomplished an infinite sea of waves, as the boat can move
+forever. The method used to have this type of infinity is to move the
+water underneath the boat instead of moving the boat. There is a very
+detailed mesh of the water in the centre, and the further away the mesh
+the less detail. This way, we give an impression of infinity.</p>
+<p>The waves are currently generated in the shader using noise. They are
+generated in the vertex shader where we change the height for every
+vertex according to its position and time. As we get further away from
+the boat we scale the height of waves to be smaller so that the seams
+between the meshes are less noticeable.</p>
+<p>We have placed a boat that floats according to the current waves. We
+also decided that we are going to have an interactive part that will
+change some of the variables for the wave generation.</p>
+<p>Currently working on:</p>
+<ul>
+<li><p>Looking to change the strategy of the infinite sea by having one
+big mesh whith a very dense centre with vetrices and further away less
+vertices. This would eliminated the need to minimize the seams between
+the mutliple meshes.</p></li>
+<li><p>Reading about the Fast Fourier Transform for wave generation,
+according to the paper by Tessendorf. The issue we are currently facing
+is that Fourier transforms use imaginary numbers while in Godot shader
+language there aren’t.</p></li>
+<li><p>Sky</p></li>
+</ul>
+<h2 id="updated-schedule">Updated Schedule</h2>
+<h2 id="week-3-8-14-may-1">Week 3: 8-14 May</h2>
+<ul>
+<li>Work on FFT wave generation functionality.</li>
+<li>UI to dynamically change wave generation variables – done, waiting
+to complete FFT</li>
+<li>Boat physics (realistic buyancy) – completed</li>
+</ul>
+<p>Work allocation:<br> Core part: all members<br> Boat: Jonas<br> UI:
+Nephele<br> Sky Simulation: Toni<br> Water Foam: Nephele</p>
+<h2 id="week-4-15-21-may-1">Week 4: 15-21 May</h2>
+<ul>
+<li>Finish FFT</li>
+<li>Jonas works on birds</li>
+<li>Work on extras, solve any problems.</li>
+</ul>
+<h2 id="week-5-22-28-may-1">Week 5: 22-28 May</h2>
+<ul>
+<li>White water trail behind boat</li>
+<li>Foam research</li>
+<li>Work on extras, solve any problems.</li>
+</ul>
+<h2 id="week-6-29-may---4-june-1">Week 6: 29 May - 4 June</h2>
+<ul>
+<li>Camera curve (Bezier) tryout</li>
+<li>Make video, everyobody works to finalize report.</li>
+</ul>
 <h2 id="research">Research</h2>
 <ul>
 <li>https://www.cg.tuwien.ac.at/research/publications/2018/GAMPER-2018-OSG/</li>
 <li>https://www.cse.chalmers.se/edu/course/TDA362/tutorials/heightfield.html</li>
-<li>https://arm-software.github.io/opengl-es-sdk-for-android/ocean_f_f_t.html<br />
-</li>
+<li>https://arm-software.github.io/opengl-es-sdk-for-android/ocean_f_f_t.html</li>
 <li>https://www.youtube.com/watch?v=VSwVwIYEypY</li>
 <li>https://www.youtube.com/watch?v=kGEqaX4Y4bQ</li>
 <li>https://www.youtube.com/watch?v=lo8YwUkO9zQ</li>
 <li>https://en.wikipedia.org/wiki/Boids</li>
 <li>https://www.youtube.com/watch?v=7KGQ9NC4uGk</li>
 <li>https://www.youtube.com/watch?v=oosFrxF30Pk</li>
+</ul>
+<p>New Resources</p>
+<ul>
+<li>https://www.keithlantz.net/2011/10/ocean-simulation-part-one-using-the-discrete-fourier-transform/</li>
+<li>https://www.keithlantz.net/2011/11/ocean-simulation-part-two-using-the-fast-fourier-transform/</li>
+<li>https://docs.godotengine.org/en/stable/tutorials/shaders/index.html</li>
+<li>https://stayathomedev.com/tutorials/making-an-infinite-ocean-in-godot-4/</li>
 </ul>
 </body>
 </html>
