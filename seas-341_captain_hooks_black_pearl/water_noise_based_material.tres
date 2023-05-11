@@ -1,7 +1,7 @@
-[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://dpa3ik4wjcry8"]
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://b1gtctiurxrj8"]
 
 [ext_resource type="Shader" path="res://water_noise_based.gdshader" id="1_whmqm"]
-[ext_resource type="Texture2D" uid="uid://baatuy3rsngsi" path="res://water_noise.tres" id="2_1yapn"]
+[ext_resource type="Texture2D" uid="uid://dxnyny0nas3wa" path="res://water_noise.tres" id="2_1yapn"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_mhybr"]
 
@@ -15,7 +15,7 @@ noise = SubResource("FastNoiseLite_mhybr")
 render_priority = 0
 shader = ExtResource("1_whmqm")
 shader_parameter/water_displacement = Vector2(0, 0)
-shader_parameter/cpu_time = 76.9473
+shader_parameter/cpu_time = 779.8
 shader_parameter/height_scale = 2.0
 shader_parameter/noise_frequency = 0.1
 shader_parameter/noise = ExtResource("2_1yapn")

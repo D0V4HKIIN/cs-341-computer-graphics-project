@@ -20,7 +20,7 @@ func _ready():
 var submerged = false;
 var boat_position_in_water = Vector2(0.0, 0.0);
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if Input.is_action_just_pressed("boat_reset"):
 		rotation = Vector3(PI, rotation.y, rotation.z);
 	
