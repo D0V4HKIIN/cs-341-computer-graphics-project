@@ -14,8 +14,9 @@ noise = SubResource("FastNoiseLite_mhybr")
 [resource]
 render_priority = 0
 shader = ExtResource("1_whmqm")
+shader_parameter/water_displacement = Vector2(0, 0)
+shader_parameter/cpu_time = 76.9473
 shader_parameter/height_scale = 2.0
-shader_parameter/water_displacement = null
-shader_parameter/cpu_time = null
+shader_parameter/noise_frequency = 0.1
 shader_parameter/noise = ExtResource("2_1yapn")
 shader_parameter/normalmap = SubResource("NoiseTexture2D_dktfb")

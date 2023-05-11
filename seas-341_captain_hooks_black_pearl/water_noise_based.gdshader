@@ -1,9 +1,12 @@
 shader_type spatial;
 render_mode specular_toon;
 
-uniform float height_scale = 2.0;
 uniform vec2 water_displacement; // to simulate the water without actually moving the boat
 uniform float cpu_time; // so that we have the same time in gpu and cpu
+
+// variables that affect the water
+uniform float height_scale;
+uniform float noise_frequency;
 
 uniform sampler2D noise;
 uniform sampler2D normalmap;
@@ -15,7 +18,8 @@ varying float vertex_distance_clamped;
 varying vec2 vertex_pos;
 
 float wave(vec2 position){
-	position += texture(noise, position / 10.0).x * 2.0 - 1.0;
+	// * 2.0 - 1.0 to make it in [-1, 1]
+	position += texture(noise, position * noise_frequency).x * 2.0 - 1.0;
 	vec2 wv = 1.0 - abs(sin(position));
 	return pow(1.0 - pow(wv.x * wv.y, 0.65), 4.0);
 }
