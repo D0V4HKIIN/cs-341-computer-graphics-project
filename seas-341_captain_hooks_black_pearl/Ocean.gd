@@ -38,6 +38,4 @@ func createOcean():
 func _ready():
 	seed(1);
 	random_number_xi = rng.randfn();
-	
-	
-	createOcean();
+	#createOcean();
