@@ -102,7 +102,8 @@ Currently working on:
 
 * Sky
 
-![Boat-water interaction](images/boat_with_waves.jpg){width="500px"}
+### Video
+<iframe width="560" height="315" src="https://www.youtube.com/embed/MTN1h5vx-30" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 ## Updated Schedule
 
