@@ -20,10 +20,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -17.0
-offset_top = -51.0
-offset_right = 5.0
-offset_bottom = -139.0
+offset_left = -25.0
+offset_top = -56.0
+offset_right = -3.0
+offset_bottom = -66.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 25
@@ -38,7 +38,11 @@ alignment = 1
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Hello"
+text = "Hey! 
+Move Camera using WASD keys
+Move  Boat using arrow keys
+Flip boat using R
+-------------------------------------------------"
 
 [node name="HSlider" type="HSlider" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
