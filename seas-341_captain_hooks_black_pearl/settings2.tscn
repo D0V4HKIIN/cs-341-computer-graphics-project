@@ -60,23 +60,17 @@ layout_mode = 2
 text = "Materials:
 "
 
-[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/Label2"]
+[node name="noise_button" type="CheckBox" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-offset_top = 30.0
-offset_right = 253.0
-offset_bottom = 61.0
 button_pressed = true
 button_group = ExtResource("2_xv8cx")
 text = "Noise based"
 
-[node name="CheckBox2" type="CheckBox" parent="MarginContainer/VBoxContainer/Label2"]
+[node name="tessendorf_button" type="CheckBox" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-offset_top = 55.0
-offset_right = 253.0
-offset_bottom = 86.0
 button_group = ExtResource("2_xv8cx")
 text = "Tessendorf"
 
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/HSlider" to="." method="_on_h_slider_value_changed"]
-[connection signal="toggled" from="MarginContainer/VBoxContainer/Label2/CheckBox" to="." method="_on_check_box_toggled"]
-[connection signal="toggled" from="MarginContainer/VBoxContainer/Label2/CheckBox2" to="." method="_on_check_box_toggled"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/noise_button" to="." method="_noise_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/tessendorf_button" to="." method="_tessendorf_pressed"]

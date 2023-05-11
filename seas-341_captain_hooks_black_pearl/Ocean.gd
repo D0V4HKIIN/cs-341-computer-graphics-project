@@ -11,6 +11,8 @@ var spawnPoint = preload("res://OceanGridSpawnInfo.tres");
 var rng = RandomNumberGenerator.new();
 var random_number_xi;
 
+func getWater():
+	return get_tree().get_nodes_in_group("Water");
 
 # creates a bunch of water tiles and sets the position, subdivision and scale
 func createOcean():
