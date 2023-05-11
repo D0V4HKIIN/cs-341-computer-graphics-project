@@ -1,7 +1,7 @@
-[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://b1gtctiurxrj8"]
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://dpa3ik4wjcry8"]
 
 [ext_resource type="Shader" path="res://water_noise_based.gdshader" id="1_whmqm"]
-[ext_resource type="Texture2D" uid="uid://dxnyny0nas3wa" path="res://water_noise.tres" id="2_1yapn"]
+[ext_resource type="Texture2D" uid="uid://baatuy3rsngsi" path="res://water_noise.tres" id="2_1yapn"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_mhybr"]
 

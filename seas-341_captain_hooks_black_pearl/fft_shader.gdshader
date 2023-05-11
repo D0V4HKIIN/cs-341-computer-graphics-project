@@ -15,11 +15,23 @@ const float N = 200.;
 
 varying float wave_height ;
 
+varying float vertex_distance;
+varying float vertex_distance_clamped;
+varying vec2 vertex_pos;
+
 // get random number somehow
 uniform float random_number_xi;
 
+// if need to work with complex numbers, since we cannot,
+// define the methods according to complex numbers
 
-
+vec2 ComplexMult(vec2 x, vec2 y) {
+    return vec2(x[0] * y[0] - x[1] * y[1], x[1] * y[0] + x[0] * y[1]);
+}
+ 
+vec2 iMult(vec2 z) {
+    return vec2(-z[1], z[0]);
+}
 
 vec2 euler(float value){
 	return vec2 (cos(value), sin(value));
@@ -67,19 +79,13 @@ vec2 height(vec2 x_pos, vec2 z_pos, float time) {
 complex h_tilda_f(float time, int n_prime, int m_prime) {
 	return 
 }
+//void displacement 
 
+//void normal
 
-
-void displacement 
-
-void normal
-
-
-
-
-
-
-
+void vertex() {
+	VERTEX.y = 
+}
 
 void fragment() {
 	// Place fragment code here.

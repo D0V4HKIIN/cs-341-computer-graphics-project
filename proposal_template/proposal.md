@@ -84,14 +84,78 @@ Work allocation:<br>
 We consider making the demo in Godot, an open-source game engine.<br>
 We believe that in order to make our project look really realistic and interactive, we need a solid framework.
 
+# Milestone Report 12/05/2023
+
+## Current state of project
+
+We have accomplished an infinite sea of waves, as the boat can move forever. The method used to have this type of infinity is to move the water underneath the boat instead of moving the boat. There is a very detailed mesh of the water in the centre, and the further away the mesh the less detail. This way, we give an impression of infinity.
+
+The waves are currently generated in the shader using noise. They are generated in the vertex shader where we change the height for every vertex according to its position and time. As we get further away from the boat we scale the height of waves to be smaller so that the seams between the meshes are less noticeable.
+
+We have placed a boat that floats according to the current waves. We also decided that we are going to have an interactive part that will change some of the variables for the wave generation.
+
+Currently working on:
+
+* Looking to change the strategy of the infinite sea by having one big mesh whith a very dense centre with vetrices and further away less vertices. This would eliminated the need to minimize the seams between the mutliple meshes.
+
+* Reading about the Fast Fourier Transform for wave generation, according to the paper by Tessendorf. The issue we are currently facing is that Fourier transforms use imaginary numbers while in Godot shader language there aren't.
+
+* Sky
+
+![Boat-water interaction](images/boat_with_waves.jpg){width="500px"}
+
+## Updated Schedule
+
+## Week 3: 8-14 May
+
+ * Work on FFT wave generation functionality.
+ * UI to dynamically change wave generation variables -- completed, waiting to complete FFT
+ * Boat physics (realistic buyancy)  -- completed
+
+Work allocation:<br>
+  Core part: all members<br>
+  Boat: Jonas<br>
+  UI: Nephele<br>
+  Sky Simulation: Toni<br>
+  Water Foam: Nephele
+
+## Week 4: 15-21 May
+
+ * Finish FFT
+ * Jonas works on birds
+ * Work on extras, solve any problems.
+
+## Week 5: 22-28 May
+
+ * White water trail behind boat
+ * Design a cooler boat in Blender!
+ * Foam research
+ * Work on extras, solve any problems.
+
+## Week 6: 29 May - 4 June
+
+ * Camera curve (Bezier) tryout
+ * Make video, everyobody works to finalize report.
+
+
+
 ## Research
 
  * https://www.cg.tuwien.ac.at/research/publications/2018/GAMPER-2018-OSG/
  * https://www.cse.chalmers.se/edu/course/TDA362/tutorials/heightfield.html
- * https://arm-software.github.io/opengl-es-sdk-for-android/ocean_f_f_t.html	
+ * https://arm-software.github.io/opengl-es-sdk-for-android/ocean_f_f_t.html
  * https://www.youtube.com/watch?v=VSwVwIYEypY
  * https://www.youtube.com/watch?v=kGEqaX4Y4bQ
  * https://www.youtube.com/watch?v=lo8YwUkO9zQ
  * https://en.wikipedia.org/wiki/Boids
  * https://www.youtube.com/watch?v=7KGQ9NC4uGk
  * https://www.youtube.com/watch?v=oosFrxF30Pk
+
+ New Resources
+
+ * https://www.keithlantz.net/2011/10/ocean-simulation-part-one-using-the-discrete-fourier-transform/
+ * https://www.keithlantz.net/2011/11/ocean-simulation-part-two-using-the-fast-fourier-transform/
+ * https://docs.godotengine.org/en/stable/tutorials/shaders/index.html
+ * https://stayathomedev.com/tutorials/making-an-infinite-ocean-in-godot-4/
+
+
