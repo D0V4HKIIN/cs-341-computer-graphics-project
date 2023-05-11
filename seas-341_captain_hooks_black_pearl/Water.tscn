@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cng3sv2fqmgje"]
 
-[ext_resource type="Material" uid="uid://b1gtctiurxrj8" path="res://water_noise_based_material.tres" id="1_2605e"]
+[ext_resource type="Material" uid="uid://dpa3ik4wjcry8" path="res://water_noise_based_material.tres" id="1_2605e"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_triiu"]
 size = Vector2(10, 10)

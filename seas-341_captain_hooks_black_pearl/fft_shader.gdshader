@@ -19,8 +19,6 @@ varying float wave_height ;
 uniform float random_number_xi;
 
 
-
-
 vec2 euler(float value){
 	return vec2 (cos(value), sin(value));
 }
