@@ -1,18 +1,16 @@
 shader_type spatial;
 
-uniform float cpu_time;
-
-const vec2 wind_direction = vec2(1,2);
-const float wind_speed = 1.;
-
-
 const float g = 9.8;
 //const float PI = 3.14159265358979323846;
 varying float L_x;
 varying float L_y;
 
-const float M = 200.;
-const float N = 200.;
+const float M = 10.;
+const float N = 10.;
+
+uniform float cpu_time;
+uniform float A = 1.0; // "A is a numeric constant"
+uniform vec2 w = vec2(1.0); // wind
 
 varying float vertex_distance;
 varying float vertex_distance_clamped;
@@ -47,7 +45,19 @@ float dispersion(float n_prime, float m_prime){
 }
 
 float phillips(float n_prime, float m_prime){
-	return 0.;
+	float L = length(w) * length(w) / g;
+	
+	float kx = PI * (2. * n_prime - N) / L_x;
+	float kz = PI * (2. * m_prime - M) / L_y;
+	float k = length(vec2(kx, kz));
+	
+	float dot_prod = dot(normalize(vec2(kx, kz)), normalize(w));
+	
+	float damping = 0.001;
+	float l2 = L * L * damping * damping;
+	
+	// euler (-k * k * l2) is some dampening part as in the original paper
+	return A * exp(-1.0 / pow((k * L), 2)) * dot_prod * dot_prod * exp(-k * k * l2) / pow(n_prime, 4);
 }
 
 
@@ -55,7 +65,7 @@ vec2 h_0_bar(float n_prime, float m_prime, vec2 pos){
 	float xi_r = rand(pos);
 	float xi_i = rand(pos);
 
-	return vec2(xi_r, xi_i) * sqrt(phillips( n_prime,  m_prime) / sqrt(2));
+	return vec2(xi_r, xi_i) * sqrt(phillips(n_prime,  m_prime) / sqrt(2));
 }
 
 
@@ -81,7 +91,7 @@ vec2 height(vec2 pos, float time) {
 
 void vertex() {
 	vec3 world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	VERTEX.y = height(world_pos.xz, cpu_time).x;
+	VERTEX.y = height(world_pos.xz, cpu_time).x / 10000000000000000000.0;
 }
 
 
