@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cmhqa30lx5onx"]
+[gd_scene load_steps=3 format=3 uid="uid://cmhqa30lx5onx"]
 
 [ext_resource type="Script" path="res://settings2.gd" id="1_husos"]
+[ext_resource type="ButtonGroup" uid="uid://dowunxuevdlwh" path="res://material_group.tres" id="2_xv8cx"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -56,11 +57,26 @@ size_flags_stretch_ratio = 5.0
 
 [node name="Label2" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Label vol 2"
+text = "Materials:
+"
 
-[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer"]
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/Label2"]
 layout_mode = 2
-text = " Check here for noise"
+offset_top = 30.0
+offset_right = 253.0
+offset_bottom = 61.0
+button_pressed = true
+button_group = ExtResource("2_xv8cx")
+text = "Noise based"
+
+[node name="CheckBox2" type="CheckBox" parent="MarginContainer/VBoxContainer/Label2"]
+layout_mode = 2
+offset_top = 55.0
+offset_right = 253.0
+offset_bottom = 86.0
+button_group = ExtResource("2_xv8cx")
+text = "Tessendorf"
 
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/HSlider" to="." method="_on_h_slider_value_changed"]
-[connection signal="toggled" from="MarginContainer/VBoxContainer/CheckBox" to="." method="_on_check_box_toggled"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/Label2/CheckBox" to="." method="_on_check_box_toggled"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/Label2/CheckBox2" to="." method="_on_check_box_toggled"]
