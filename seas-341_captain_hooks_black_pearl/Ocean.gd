@@ -48,15 +48,15 @@ func update_variables():
 	var material = tree.get_first_node_in_group("Water").get_active_material(0);
 	
 	# noise_frequency
-	#noise_frequency = material.get("shader_parameter/noise_frequency");
+	noise_frequency = material.get("shader_parameter/noise_frequency");
 	
 	# height_scale
-	#height_scale = material.get("shader_parameter/height_scale");
+	height_scale = material.get("shader_parameter/height_scale");
 	
 	# noise texture
-	#water_noise = material.get("shader_parameter/noise");
-	#await water_noise.changed
-	#noise = water_noise.get_image();
+	water_noise = material.get("shader_parameter/noise");
+	await water_noise.changed
+	noise = water_noise.get_image();
 
 # called when scene is instanciated
 func _ready():

@@ -20,4 +20,3 @@ shader_parameter/height_scale = 2.0
 shader_parameter/noise_frequency = 0.1
 shader_parameter/noise = ExtResource("2_1yapn")
 shader_parameter/normalmap = SubResource("NoiseTexture2D_dktfb")
-
