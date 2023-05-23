@@ -82,7 +82,17 @@ layout_mode = 2
 button_group = ExtResource("2_xv8cx")
 text = "Tessendorf"
 
+[node name="bird count" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "bird count:"
+
+[node name="bird count slider" type="HSlider" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 200.0
+value = 20.0
+
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/wave_height slider" to="." method="change_wave_height"]
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/wave speed slider" to="." method="change_wave_speed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/noise_button" to="." method="_noise_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/tessendorf_button" to="." method="_tessendorf_pressed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/bird count slider" to="." method="change_birds"]

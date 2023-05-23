@@ -1,6 +1,5 @@
 extends MultiMeshInstance3D
 
-@onready var swarm = $"../birds"
 @onready var box = $"../birds/Box"
 
 var box_vertices: Vector3
@@ -27,7 +26,7 @@ var max_vertex = Vector3(-INF, -INF, -INF)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	BOID_COUNT = swarm.multimesh.instance_count
+	BOID_COUNT = multimesh.instance_count
 	boid_positions.resize(BOID_COUNT)
 	boid_velocities.resize(BOID_COUNT)
 	attractor_positions.resize(attractor_count)
@@ -48,12 +47,12 @@ func _ready():
 	for i in range(BOID_COUNT):
 		boid_positions[i] = Vector3(randf_range(min_vertex.x, max_vertex.x), randf_range(min_vertex.y, max_vertex.y), randf_range(min_vertex.z, max_vertex.z))
 		boid_velocities[i] = Vector3(randf_range(-1, 1), randf_range(-1, 1), randf_range(-1, 1)).normalized() * randf_range(BOID_SPEED_MIN, BOID_SPEED_MAX)
-		swarm.multimesh.set_instance_transform(i, Transform3D(Basis(), boid_positions[i]))
-		swarm.multimesh.set_instance_custom_data(i, Color(randf(), randf(), randf(), randf()))
+		multimesh.set_instance_transform(i, Transform3D(Basis(), boid_positions[i]))
+		multimesh.set_instance_custom_data(i, Color(randf(), randf(), randf(), randf()))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	for i in range(swarm.multimesh.instance_count):
+	for i in range(multimesh.instance_count):
 		var position = boid_positions[i]
 		var velocity = boid_velocities[i]
 
@@ -63,7 +62,7 @@ func _process(delta):
 		var separation = Vector3()
 		var neighbor_count = 0
 
-		for j in range(swarm.multimesh.instance_count):
+		for j in range(multimesh.instance_count):
 			if i != j:
 				var neighbor_position = boid_positions[j]
 
