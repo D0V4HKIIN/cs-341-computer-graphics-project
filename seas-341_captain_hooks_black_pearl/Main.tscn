@@ -1,17 +1,29 @@
-[gd_scene load_steps=8 format=3 uid="uid://vqwdgpeqmylb"]
+[gd_scene load_steps=10 format=3 uid="uid://vqwdgpeqmylb"]
 
+[ext_resource type="Shader" path="res://sky.gdshader" id="1_8mn5p"]
 [ext_resource type="Script" path="res://DefaultCamera.gd" id="1_far80"]
 [ext_resource type="PackedScene" uid="uid://dauvp4g2i071q" path="res://Boat.tscn" id="3_jaqp4"]
 [ext_resource type="PackedScene" uid="uid://dsy0g7e3hkkfg" path="res://Ocean.tscn" id="4_f5de0"]
 [ext_resource type="PackedScene" uid="uid://cmhqa30lx5onx" path="res://settings2.tscn" id="6_ceydy"]
+[ext_resource type="PackedScene" uid="uid://dsk1f1citr7e2" path="res://Birds/birds.tscn" id="6_vrfpa"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1j8ng"]
-sky_top_color = Color(0.341176, 0.67451, 0.92549, 1)
-sky_horizon_color = Color(0.635294, 0.710878, 0.764623, 1)
-ground_horizon_color = Color(0.635294, 0.710878, 0.764623, 1)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cb2s5"]
+shader = ExtResource("1_8mn5p")
+shader_parameter/skyColor = Color(0.352941, 0.72549, 1, 1)
+shader_parameter/add_clouds = true
+shader_parameter/clouds_below = false
+shader_parameter/cloud_scale = 0.25
+shader_parameter/speed = 0.021
+shader_parameter/cloud_dark = 0.32
+shader_parameter/cloud_light = 1.0
+shader_parameter/cloud_cover = 1.0
+shader_parameter/cloud_alpha = 5.85
+shader_parameter/sky_tint = 0.5
+shader_parameter/height_offset = 0.304
+shader_parameter/sky_contribution = 0.5
 
 [sub_resource type="Sky" id="Sky_0uvdm"]
-sky_material = SubResource("ProceduralSkyMaterial_1j8ng")
+sky_material = SubResource("ShaderMaterial_cb2s5")
 
 [sub_resource type="Environment" id="Environment_ww4o1"]
 background_mode = 2
@@ -20,7 +32,7 @@ tonemap_mode = 2
 
 [node name="Main" type="Node"]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="sky" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ww4o1")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
@@ -40,3 +52,6 @@ transform = Transform3D(6, 0, 0, 0, 1, 0, 0, 0, 6, 0, 0, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.230931, 1.33139, 0.0293784)
 
 [node name="Control" parent="." instance=ExtResource("6_ceydy")]
+
+[node name="birds" parent="." instance=ExtResource("6_vrfpa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 30, 0)
