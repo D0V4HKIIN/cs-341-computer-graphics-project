@@ -11,6 +11,8 @@ var spawnPoint = preload("res://OceanGridSpawnInfo.tres");
 var rng = RandomNumberGenerator.new();
 var random_number_xi;
 
+var material : Material;
+
 func getWater():
 	return get_tree().get_nodes_in_group("Water");
 
@@ -35,23 +37,31 @@ func createOcean():
 		waterInstance.set_scale(Vector3(tileScale, 1.0, tileScale)); # Ignore Y value because planes are 2d
 		
 		waterInstance.add_to_group("Water"); # to get the water meshes in the ui
+		
+		
+	material = get_tree().get_first_node_in_group("Water").get_active_material(0);
+	
 
 # Water shader varialbes
 var water_noise : NoiseTexture2D;
 var noise : Image
 var height_scale = 1;
+var wave_speed = 1;
 var noise_frequency = 1;
 
 func update_variables():
 	print("updating variables");
 	var tree = get_tree();
-	var material = tree.get_first_node_in_group("Water").get_active_material(0);
+	material = tree.get_first_node_in_group("Water").get_active_material(0);
 	
 	# noise_frequency
 	noise_frequency = material.get("shader_parameter/noise_frequency");
 	
 	# height_scale
 	height_scale = material.get("shader_parameter/height_scale");
+	
+	# wave speed
+	wave_speed = material.get("shader_parameter/wave_speed");
 	
 	# noise texture
 	water_noise = material.get("shader_parameter/noise");
@@ -97,6 +107,8 @@ func noise_height(pos, time):
 
 
 func get_water_height(pos):
+	var boat_position_in_water = material.get("shader_parameter/water_displacement");	
+	var floater_tex_position = Vector2(pos.x, pos.z) / 2  + Vector2.ONE * cpu_time * wave_speed + boat_position_in_water;
 	if(noise == null):
 		return 0;
-	return noise_height(pos, cpu_time);
+	return noise_height(floater_tex_position, cpu_time);

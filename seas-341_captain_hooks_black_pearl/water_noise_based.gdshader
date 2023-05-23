@@ -7,6 +7,7 @@ uniform float cpu_time; // so that we have the same time in gpu and cpu
 // variables that affect the water
 uniform float height_scale;
 uniform float noise_frequency;
+uniform float wave_speed;
 
 uniform sampler2D noise;
 uniform sampler2D normalmap;
@@ -34,7 +35,7 @@ float height(vec2 position, float time) {
 
 void vertex() {
 	vec3 world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	tex_position = world_pos.xz / 2.0 + cpu_time * 0.05 + water_displacement;
+	tex_position = world_pos.xz / 2.0 + cpu_time * wave_speed + water_displacement;
 	
 	vertex_distance = distance(world_pos, vec3(0.0));
 	vertex_distance = clamp(vertex_distance, 0.0, 85.0);

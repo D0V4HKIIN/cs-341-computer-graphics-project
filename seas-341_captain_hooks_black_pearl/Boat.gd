@@ -43,8 +43,8 @@ func _physics_process(_delta):
 	# buoyancy approximation
 	submerged = false
 	for floater in floaters:
-		var floater_tex_position = Vector2(floater.global_position.x, floater.global_position.z) / 2  + Vector2.ONE * ocean.cpu_time * 0.05 + boat_position_in_water;
-		var depth = ocean.get_water_height(floater_tex_position) - floater.global_position.y 
+		
+		var depth = ocean.get_water_height(floater.global_position) - floater.global_position.y 
 		if depth > 0:
 			submerged = true
 			apply_force(Vector3.UP * float_force * gravity * sqrt(depth), floater.global_position - global_position)
