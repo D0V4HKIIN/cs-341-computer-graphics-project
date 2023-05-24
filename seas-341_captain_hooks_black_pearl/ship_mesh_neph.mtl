@@ -1,8 +1,8 @@
-# Blender 3.4.1 MTL File: 'ship_mesh_neph.blend'
-# www.blender.org
+# Blender MTL File: 'ship_mesh_neph.blend'
+# Material Count: 5
 
 newmtl boatmaterial
-Ns 147.500534
+Ns 147.500546
 Ka 0.347826 0.347826 0.347826
 Kd 0.157428 0.058269 0.016583
 Ks 0.500000 0.500000 0.500000
