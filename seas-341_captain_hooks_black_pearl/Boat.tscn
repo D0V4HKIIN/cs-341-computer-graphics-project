@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dauvp4g2i071q"]
 
 [ext_resource type="Script" path="res://Boat.gd" id="1_gtp0f"]
-[ext_resource type="ArrayMesh" uid="uid://bomnupby41ikr" path="res://boat.obj" id="2_bscb6"]
+[ext_resource type="ArrayMesh" uid="uid://5blergw73pxg" path="res://ship_mesh_neph_outside.obj" id="2_ddja4"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ahewb"]
 size = Vector3(3, 1, 1.5)
@@ -44,5 +44,5 @@ transform = Transform3D(-4.37114e-08, -0.173648, 0.984808, 0, 0.984808, 0.173648
 
 [node name="boatMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-mesh = ExtResource("2_bscb6")
+mesh = ExtResource("2_ddja4")
 skeleton = NodePath("../floaters")
