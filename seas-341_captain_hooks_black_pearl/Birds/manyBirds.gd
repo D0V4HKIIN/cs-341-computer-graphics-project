@@ -24,8 +24,7 @@ var boid_velocities: PackedVector3Array
 var min_vertex = Vector3(INF, INF, INF)
 var max_vertex = Vector3(-INF, -INF, -INF)
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
+func setup():
 	BOID_COUNT = multimesh.instance_count
 	boid_positions.resize(BOID_COUNT)
 	boid_velocities.resize(BOID_COUNT)
@@ -49,6 +48,11 @@ func _ready():
 		boid_velocities[i] = Vector3(randf_range(-1, 1), randf_range(-1, 1), randf_range(-1, 1)).normalized() * randf_range(BOID_SPEED_MIN, BOID_SPEED_MAX)
 		multimesh.set_instance_transform(i, Transform3D(Basis(), boid_positions[i]))
 		multimesh.set_instance_custom_data(i, Color(randf(), randf(), randf(), randf()))
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	setup()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
