@@ -1,5 +1,6 @@
-[gd_scene load_steps=12 format=3 uid="uid://vqwdgpeqmylb"]
+[gd_scene load_steps=13 format=3 uid="uid://vqwdgpeqmylb"]
 
+[ext_resource type="Script" path="res://Main.gd" id="1_3ycsj"]
 [ext_resource type="Shader" path="res://sky.gdshader" id="1_8mn5p"]
 [ext_resource type="Script" path="res://DefaultCamera.gd" id="1_far80"]
 [ext_resource type="PackedScene" uid="uid://dauvp4g2i071q" path="res://Boat.tscn" id="3_jaqp4"]
@@ -34,6 +35,7 @@ reflected_light_source = 2
 tonemap_mode = 2
 
 [node name="Main" type="Node"]
+script = ExtResource("1_3ycsj")
 
 [node name="sky" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ww4o1")

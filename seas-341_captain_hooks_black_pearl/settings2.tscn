@@ -42,6 +42,7 @@ text = "Hey!
 Move Camera using WASD keys
 Move  Boat using arrow keys
 Flip boat using R
+To change camera use 1,2,3,4
 -------------------------------------------------"
 
 [node name="wave height label" type="Label" parent="MarginContainer/VBoxContainer"]
