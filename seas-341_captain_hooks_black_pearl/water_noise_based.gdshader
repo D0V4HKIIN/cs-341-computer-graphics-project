@@ -76,12 +76,10 @@ void fragment() {
 	ROUGHNESS = 0.01 * (1.0 - fresnel);
 	
 	// white water
-	//DEPTH = 0.;
 	float height_above_white_water = world_vertex.y - height_scale * scaling * foam_height;
 	if(height_above_white_water > 0.){
 		surface_color += texture(white_water_noise, tex_position).xyz * foam_weight * height_above_white_water * 9.;
 		ROUGHNESS = 0.1;
-		//DEPTH = texture(white_water_noise, tex_position).r;
 	}
 	
 	ALBEDO = surface_color;
