@@ -70,4 +70,3 @@ script = ExtResource("8_h4a2x")
 update_mode = 1
 size = Vector3(1000, 1000, 1000)
 origin_offset = Vector3(0, 10, 0)
-mesh_lod_threshold = 0.0
