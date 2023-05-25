@@ -12,6 +12,9 @@ uniform float wave_speed;
 uniform sampler2D noise;
 uniform sampler2D normalmap;
 
+uniform vec3 color1 : source_color;
+uniform vec3 color2 : source_color;
+
 varying vec2 tex_position;
 
 varying float vertex_distance;
@@ -31,6 +34,10 @@ float height(vec2 position, float time) {
 	d += wave((position + time) * 0.5) * 0.2;
 	d += wave((position - time) * 0.6) * 0.2;
 	return d * height_scale;
+}
+
+float fresnel(float amount, vec3 normal, vec3 view) {
+	return pow((1.0 - clamp(dot(normalize(normal), normalize(view)), 0.0, 1.0)), amount);
 }
 
 void vertex() {
@@ -53,9 +60,11 @@ void fragment() {
 	NORMAL_MAP = normal_noise;
 	
 	// normal water material
-	float fresnel = sqrt(1.0 - dot(NORMAL, VIEW));
+	//float fresnel = sqrt(1.0 - dot(NORMAL, VIEW));
+	float fresnel = fresnel(5.0, NORMAL, VIEW);
+	vec3 surface_color = mix(color1, color2, fresnel);
 	RIM = 0.2;
 	METALLIC = 0.0;
 	ROUGHNESS = 0.01 * (1.0 - fresnel);
-	ALBEDO = vec3(0.01, 0.03, 0.05) + (0.1 * fresnel);
+	ALBEDO = surface_color;
 }
