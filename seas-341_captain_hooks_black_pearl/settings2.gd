@@ -22,18 +22,3 @@ func change_wave_speed(value):
 func change_birds(value):
 	birds.multimesh.set_instance_count(value);
 	birds.setup()
-
-func _noise_pressed():
-	print("noise")
-	var water_meshes = ocean.getWater();
-	
-	for water in water_meshes:
-		water.material_override = noise_material;
-
-func _tessendorf_pressed():
-	print("tessendorf")
-	var water_meshes = ocean.getWater();
-	
-	for water in water_meshes:
-		water.material_override = tessendorf_material;
-	
