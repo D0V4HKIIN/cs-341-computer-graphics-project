@@ -8,7 +8,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0ikiy"]
 render_priority = 0
 shader = ExtResource("1_cf336")
-shader_parameter/color1 = Color(0.878431, 0.419608, 0.25098, 1)
+shader_parameter/color1 = Color(0.858824, 0.764706, 0.74902, 1)
 shader_parameter/displ_amnt = 0.8
 shader_parameter/displ_speed = 20.0
 shader_parameter/time_scale = 1.0

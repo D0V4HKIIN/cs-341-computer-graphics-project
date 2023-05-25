@@ -14,7 +14,7 @@ func _ready():
  pass;
  
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
  #var target_dir = (target.position - self.position).normalized()
  rotateAround(target, self)
  look_at(target.position)

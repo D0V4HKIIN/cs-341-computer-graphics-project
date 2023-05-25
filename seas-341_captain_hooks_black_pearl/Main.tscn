@@ -64,3 +64,7 @@ script = ExtResource("7_318bf")
 
 [node name="rotating_camera" type="Camera3D" parent="."]
 script = ExtResource("8_h4a2x")
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="."]
+visible = false
+size = Vector3(1000, 20, 1000)
