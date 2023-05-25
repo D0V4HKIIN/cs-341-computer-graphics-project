@@ -8,7 +8,7 @@ uniform float cpu_time; // so that we have the same time in gpu and cpu
 uniform float height_scale;
 uniform float noise_frequency;
 uniform float wave_speed;
-uniform float foam_height = 0.82;
+uniform float foam_height = 0.5;
 uniform float foam_weight = 0.1;
 uniform float max_seam_compensation = 500.;
 
@@ -29,15 +29,15 @@ varying vec2 vertex_pos;
 float wave(vec2 position){
 	// * 2.0 - 1.0 to make it in [-1, 1]
 	position += texture(noise, position * noise_frequency).x * 2.0 - 1.0;
-	vec2 wv = 1.0 - abs(sin(position));
-	return pow(1.0 - pow(wv.x * wv.y, 0.65), 4.0);
+	float wv = 1.0 - abs(sin(position.x + position.y));
+	return pow(1.0 - pow(wv, 0.65), 4.0);
 }
 
 float height(vec2 position, float time) {
 	float d = wave((position + time) * 0.4) * 0.3;
-	d += wave((position - time) * 0.3) * 0.3;
+	d += wave((position + time) * 0.3) * 0.3;
 	d += wave((position + time) * 0.5) * 0.2;
-	d += wave((position - time) * 0.6) * 0.2;
+	d += wave((position + time) * 0.6) * 0.2;
 	return d * height_scale;
 }
 
@@ -70,7 +70,7 @@ void fragment() {
 	float fresnel = fresnel(5.0, NORMAL, VIEW);
 	vec3 surface_color = mix(color1, color2, fresnel);
 	if(world_vertex.y > height_scale * scaling * foam_height){
-		surface_color = mix(surface_color, texture(noise, tex_position).xyz, foam_weight);
+		surface_color += texture(noise, tex_position).xyz * foam_weight;
 	}
 	// normal water material
 	RIM = 0.2;

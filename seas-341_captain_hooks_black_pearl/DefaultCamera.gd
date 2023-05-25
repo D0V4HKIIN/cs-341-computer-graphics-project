@@ -21,7 +21,7 @@ func _process(delta):
 	var side_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var vertical_dir = Input.get_axis("move_up", "move_down")
 	# create a 3d vector out of the inputs
-	var direction = Vector3(side_dir.x, vertical_dir, side_dir.y)
+	var direction = Vector3(side_dir.x, -vertical_dir, side_dir.y)
 	
 	# check if speedup button is pressed
 	var speedup = 1.0
