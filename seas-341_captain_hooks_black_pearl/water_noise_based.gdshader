@@ -8,6 +8,10 @@ uniform float cpu_time; // so that we have the same time in gpu and cpu
 uniform float height_scale;
 uniform float noise_frequency;
 uniform float wave_speed;
+uniform float foam_height = 0.82;
+uniform float foam_weight = 0.1;
+uniform float max_seam_compensation = 500.;
+
 
 uniform sampler2D noise;
 uniform sampler2D normalmap;
@@ -16,6 +20,7 @@ uniform vec3 color1 : source_color;
 uniform vec3 color2 : source_color;
 
 varying vec2 tex_position;
+varying float scaling;
 
 varying float vertex_distance;
 varying float vertex_distance_clamped;
@@ -45,11 +50,12 @@ void vertex() {
 	tex_position = world_pos.xz / 2.0 + cpu_time * wave_speed + water_displacement;
 	
 	vertex_distance = distance(world_pos, vec3(0.0));
-	vertex_distance = clamp(vertex_distance, 0.0, 85.0);
-	vertex_distance_clamped = vertex_distance / 85.0;
+	vertex_distance = clamp(vertex_distance, 0.0, max_seam_compensation);
+	vertex_distance_clamped = vertex_distance / max_seam_compensation;
 	
+	scaling = 1.0 - vertex_distance_clamped;
 	float h = height(tex_position, cpu_time);
-	VERTEX.y += h * (1.0 - vertex_distance_clamped);
+	VERTEX.y += h * scaling;
 
 	NORMAL = normalize(vec3(h - height(tex_position + vec2(0.1, 0.0), cpu_time), 0.1, h - height(tex_position + vec2(0.0, 0.1), cpu_time)));
 }
@@ -59,12 +65,18 @@ void fragment() {
 	vec3 normal_noise = texture(normalmap, tex_position).xyz;
 	NORMAL_MAP = normal_noise;
 	
-	// normal water material
-	//float fresnel = sqrt(1.0 - dot(NORMAL, VIEW));
+	vec3 world_vertex = (INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	
 	float fresnel = fresnel(5.0, NORMAL, VIEW);
 	vec3 surface_color = mix(color1, color2, fresnel);
+	if(world_vertex.y > height_scale * scaling * foam_height){
+		surface_color = mix(surface_color, texture(noise, tex_position).xyz, foam_weight);
+	}
+	// normal water material
 	RIM = 0.2;
 	METALLIC = 0.0;
 	ROUGHNESS = 0.01 * (1.0 - fresnel);
 	ALBEDO = surface_color;
+	
+	
 }
