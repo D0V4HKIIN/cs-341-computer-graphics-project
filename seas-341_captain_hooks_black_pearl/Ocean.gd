@@ -18,25 +18,29 @@ func getWater():
 
 # creates a bunch of water tiles and sets the position, subdivision and scale
 func createOcean():
-	for i in spawnPoint.spawnPoints.size():
-		# Get location, subdivision, and scale of each tile
-		var spawnLocation = spawnPoint.spawnPoints[i];
-		var tileSubdivision = spawnPoint.subdivision[i];
-		var tileScale = spawnPoint.scale[i];
-		
-		# Instanciate tile
-		var waterInstance = waterTile.instantiate();
-		
-		# Add to the scene
-		add_child(waterInstance);
-		
-		# set position, subdivision and scale
-		waterInstance.position = Vector3(spawnLocation.x, 0, spawnLocation.y) * waterInstance.mesh.size.x
-		waterInstance.mesh.set_subdivide_width(tileSubdivision);
-		waterInstance.mesh.set_subdivide_depth(tileSubdivision);
-		waterInstance.set_scale(Vector3(tileScale, 1.0, tileScale)); # Ignore Y value because planes are 2d
-		
-		waterInstance.add_to_group("Water"); # to get the water meshes in the ui
+	var waterInstance = waterTile.instantiate()
+	add_child(waterInstance)
+	waterInstance.add_to_group("Water")
+	
+	#for i in spawnPoint.spawnPoints.size():
+	#	# Get location, subdivision, and scale of each tile
+	#	var spawnLocation = spawnPoint.spawnPoints[i];
+	#	var tileSubdivision = spawnPoint.subdivision[i];
+	#	var tileScale = spawnPoint.scale[i];
+	#	
+	#	# Instanciate tile
+	#	var waterInstance = waterTile.instantiate();
+	#	
+	#	# Add to the scene
+	#	add_child(waterInstance);
+	#	
+	#	# set position, subdivision and scale
+	#	waterInstance.position = Vector3(spawnLocation.x, 0, spawnLocation.y)# * waterInstance.mesh.size.x
+	#	#waterInstance.mesh.set_subdivide_width(tileSubdivision);
+	#	#waterInstance.mesh.set_subdivide_depth(tileSubdivision);
+	#	waterInstance.set_scale(Vector3(tileScale, 1.0, tileScale)); # Ignore Y value because planes are 2d
+	#	
+	#	waterInstance.add_to_group("Water"); # to get the water meshes in the ui
 		
 		
 	material = get_tree().get_first_node_in_group("Water").get_active_material(0);
