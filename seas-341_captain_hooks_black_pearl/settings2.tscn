@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cmhqa30lx5onx"]
+[gd_scene load_steps=2 format=3 uid="uid://cmhqa30lx5onx"]
 
 [ext_resource type="Script" path="res://settings2.gd" id="1_husos"]
-[ext_resource type="ButtonGroup" uid="uid://dowunxuevdlwh" path="res://material_group.tres" id="2_xv8cx"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -43,6 +42,7 @@ text = "Hey!
 Move Camera using WASD keys
 Move  Boat using arrow keys
 Flip boat using R
+To change camera use 1,2,3,4
 -------------------------------------------------"
 
 [node name="wave height label" type="Label" parent="MarginContainer/VBoxContainer"]
@@ -66,22 +66,6 @@ max_value = 3.0
 step = 0.05
 value = 0.1
 
-[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Materials:
-"
-
-[node name="noise_button" type="CheckBox" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-button_pressed = true
-button_group = ExtResource("2_xv8cx")
-text = "Noise based"
-
-[node name="tessendorf_button" type="CheckBox" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-button_group = ExtResource("2_xv8cx")
-text = "Tessendorf"
-
 [node name="bird count" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "bird count:"
@@ -93,6 +77,4 @@ value = 20.0
 
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/wave_height slider" to="." method="change_wave_height"]
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/wave speed slider" to="." method="change_wave_speed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/noise_button" to="." method="_noise_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/tessendorf_button" to="." method="_tessendorf_pressed"]
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/bird count slider" to="." method="change_birds"]

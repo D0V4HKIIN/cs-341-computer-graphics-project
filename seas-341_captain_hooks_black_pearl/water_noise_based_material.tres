@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://b1gtctiurxrj8"]
+[gd_resource type="ShaderMaterial" load_steps=7 format=3 uid="uid://b1gtctiurxrj8"]
 
 [ext_resource type="Shader" path="res://water_noise_based.gdshader" id="1_whmqm"]
 [ext_resource type="Texture2D" uid="uid://dxnyny0nas3wa" path="res://water_noise.tres" id="2_1yapn"]
@@ -8,18 +8,38 @@
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_dktfb"]
 seamless = true
 as_normal_map = true
-bump_strength = 6.0
+bump_strength = 1.0
 noise = SubResource("FastNoiseLite_mhybr")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_fnkij"]
+noise_type = 4
+frequency = 0.011
+fractal_type = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2bxjb"]
+width = 1024
+height = 1024
+seamless = true
+noise = SubResource("FastNoiseLite_fnkij")
 
 [resource]
 render_priority = 0
 shader = ExtResource("1_whmqm")
 shader_parameter/water_displacement = Vector2(0, 0)
-shader_parameter/cpu_time = 15850.5
+shader_parameter/cpu_time = 62.0999
 shader_parameter/height_scale = 2.0
-shader_parameter/noise_frequency = 0.1
+shader_parameter/noise_frequency = 0.05
 shader_parameter/wave_speed = 0.05
-shader_parameter/color1 = Color(0.0392157, 0.0627451, 0.431373, 1)
-shader_parameter/color2 = Color(0.517647, 0.313726, 0.180392, 1)
+shader_parameter/foam_height = 0.5
+shader_parameter/foam_weight = 0.1
+shader_parameter/max_seam_compensation = 500.0
+shader_parameter/boat_length = 0.777
+shader_parameter/boat_width = 0.39
+shader_parameter/boat_rotation = 0.0
+shader_parameter/boat_wave_height = 0.815
+shader_parameter/boat_wave_width = 1.63
+shader_parameter/color1 = Color(0.0196078, 0.219608, 0.380392, 1)
+shader_parameter/color2 = Color(0.121569, 0.517647, 0.831373, 1)
 shader_parameter/noise = ExtResource("2_1yapn")
 shader_parameter/normalmap = SubResource("NoiseTexture2D_dktfb")
+shader_parameter/white_water_noise = SubResource("NoiseTexture2D_2bxjb")

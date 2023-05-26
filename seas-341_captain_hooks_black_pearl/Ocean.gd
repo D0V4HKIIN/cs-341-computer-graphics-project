@@ -94,15 +94,15 @@ func wave(pos):
 
 	pos += Vector2.ONE * (noise.get_pixelv(pixel_pos).r * 2.0 - 1.0);
 	
-	var wv = Vector2.ONE - Vector2(abs(sin(pos.x)), abs(sin(pos.y)));
-	return pow(1.0 - pow(wv.x * wv.y, 0.65), 4.0);
+	var wv = 1 - abs(sin(pos.x + pos.y));
+	return pow(1.0 - pow(wv, 0.65), 4.0);
 
 
 func noise_height(pos, time):
 	var d = wave((pos + Vector2.ONE * time) * 0.4) * 0.3;
-	d += wave((pos - Vector2.ONE * time) * 0.3) * 0.3;
+	d += wave((pos + Vector2.ONE * time) * 0.3) * 0.3;
 	d += wave((pos + Vector2.ONE * time) * 0.5) * 0.2;
-	d += wave((pos - Vector2.ONE * time) * 0.6) * 0.2;
+	d += wave((pos + Vector2.ONE * time) * 0.6) * 0.2;
 	return d * height_scale;
 
 

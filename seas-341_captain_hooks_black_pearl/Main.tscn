@@ -1,5 +1,6 @@
-[gd_scene load_steps=12 format=3 uid="uid://vqwdgpeqmylb"]
+[gd_scene load_steps=13 format=3 uid="uid://vqwdgpeqmylb"]
 
+[ext_resource type="Script" path="res://Main.gd" id="1_3ycsj"]
 [ext_resource type="Shader" path="res://sky.gdshader" id="1_8mn5p"]
 [ext_resource type="Script" path="res://DefaultCamera.gd" id="1_far80"]
 [ext_resource type="PackedScene" uid="uid://dauvp4g2i071q" path="res://Boat.tscn" id="3_jaqp4"]
@@ -11,7 +12,7 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cb2s5"]
 shader = ExtResource("1_8mn5p")
-shader_parameter/skyColor = Color(0.352941, 0.72549, 1, 1)
+shader_parameter/skyColor = Color(0, 0.603922, 0.92549, 1)
 shader_parameter/add_clouds = true
 shader_parameter/clouds_below = false
 shader_parameter/cloud_scale = 0.25
@@ -30,9 +31,11 @@ sky_material = SubResource("ShaderMaterial_cb2s5")
 [sub_resource type="Environment" id="Environment_ww4o1"]
 background_mode = 2
 sky = SubResource("Sky_0uvdm")
+reflected_light_source = 2
 tonemap_mode = 2
 
 [node name="Main" type="Node"]
+script = ExtResource("1_3ycsj")
 
 [node name="sky" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ww4o1")
@@ -66,3 +69,8 @@ script = ExtResource("7_318bf")
 
 [node name="rotating_camera" type="Camera3D" parent="."]
 script = ExtResource("8_h4a2x")
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="."]
+update_mode = 1
+size = Vector3(1000, 1000, 1000)
+origin_offset = Vector3(0, 10, 0)
