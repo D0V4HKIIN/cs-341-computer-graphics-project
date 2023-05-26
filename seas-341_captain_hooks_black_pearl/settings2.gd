@@ -6,9 +6,6 @@ extends Control
 
 @onready var birds = $"../birds"
 
-@onready var noise_button = $MarginContainer/VBoxContainer/noise_button;
-@onready var tessendorf_button = $MarginContainer/VBoxContainer/tessendorf_button;
-
 func change_wave_height(value):
 	for water in get_tree().get_nodes_in_group("Water"):
 		water.get_active_material(0).set("shader_parameter/height_scale", value);

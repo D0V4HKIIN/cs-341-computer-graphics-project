@@ -35,6 +35,7 @@ func _physics_process(_delta):
 	# move the water shader
 	for water in get_tree().get_nodes_in_group("Water"):
 		water.get_active_material(0).set("shader_parameter/water_displacement", boat_position_in_water);
+		water.get_active_material(0).set("shader_parameter/boat_rotation", rotation.y);
 	
 	# some nice debug code
 	#var water_height = get_water_height(Vector2(global_position.x, global_position.z) / 2  + Vector2.ONE * time * 0.05 + boat_position_in_water)

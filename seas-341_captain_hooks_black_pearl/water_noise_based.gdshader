@@ -12,6 +12,12 @@ uniform float foam_height = 0.5;
 uniform float foam_weight = 0.1;
 uniform float max_seam_compensation = 500.;
 
+uniform float boat_length;
+uniform float boat_width;
+uniform float boat_rotation;
+uniform float boat_wave_height;
+uniform float boat_wave_width;
+
 
 uniform sampler2D noise;
 uniform sampler2D normalmap;
@@ -46,6 +52,11 @@ float fresnel(float amount, vec3 normal, vec3 view) {
 	return pow((1.0 - clamp(dot(normalize(normal), normalize(view)), 0.0, 1.0)), amount);
 }
 
+// square
+float sq(float x){
+	return x*x;
+}
+
 void vertex() {
 	vec3 world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	tex_position = world_pos.xz / 2.0 + cpu_time * wave_speed + water_displacement;
@@ -55,7 +66,17 @@ void vertex() {
 	vertex_distance_clamped = vertex_distance / max_seam_compensation;
 	
 	scaling = 1.0 - vertex_distance_clamped;
+	float R = 3.5;
+	float r = boat_wave_width;
 	float h = height(tex_position, cpu_time);
+	
+	mat2 world_to_boat_space = mat2(vec2(cos(boat_rotation), -sin(boat_rotation)), vec2(sin(boat_rotation), cos(boat_rotation)));
+	vec2 boat_space = world_pos.xz * world_to_boat_space;
+	
+	//float boat_wave_factor = sqrt(max(-0.2 * (boat_space.x - 3. - boat_length), 0.));
+	// add half torus for boat
+	//h += boat_wave_factor * boat_wave_height * sqrt(max(sq(r) - sq(sqrt(sq((1./boat_length) * boat_space.x) + sq((1./boat_width) * boat_space.y)) - R), 0.));
+
 	VERTEX.y += h * scaling;
 
 	NORMAL = normalize(vec3(h - height(tex_position + vec2(0.1, 0.0), cpu_time), 0.1, h - height(tex_position + vec2(0.0, 0.1), cpu_time)));
