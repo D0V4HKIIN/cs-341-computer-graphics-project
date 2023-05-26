@@ -43,6 +43,7 @@ shadow_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.820681, 0.571387, 0, -0.571387, 0.820681, 0, 17.3083, 21.6586)
+current = true
 script = ExtResource("1_far80")
 SHIFT_MULTIPLIER = 4.0
 SPEED = 4
@@ -57,11 +58,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.230931, 1.33139, 0.0293784)
 
 [node name="birds" parent="." instance=ExtResource("6_vrfpa")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 30, 0)
-visible = false
 
 [node name="bezier_camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.89011, 0, 0)
+current = true
 script = ExtResource("7_318bf")
 
 [node name="rotating_camera" type="Camera3D" parent="."]
-current = true
 script = ExtResource("8_h4a2x")
