@@ -55,8 +55,11 @@ func _physics_process(delta):
 			submerged = true
 			apply_force(Vector3.UP * float_force * gravity * sqrt(depth), floater.global_position - global_position)
 			
-			if(delta * (depth - floater_depth[index]) > 0.5):
-				print(depth - floater_depth[index])
+			if(delta * (depth - floater_depth[index]) > 0.002):
+				var splash_speed = sqrt(delta * (depth - floater_depth[index]) * 4000)
+				print(splash_speed)
+				floater.process_material.initial_velocity_max = splash_speed
+				floater.process_material.initial_velocity_max = splash_speed + 2
 				floater.emitting = true
 		
 		floater_depth[index] = depth
