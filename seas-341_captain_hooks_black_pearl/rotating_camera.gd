@@ -7,7 +7,7 @@ var speedCircular = 0.5;
 
 var theta = 0.1;
 var dtheta = 2 * PI / 600;
-var r = 40;
+var r = 50;
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

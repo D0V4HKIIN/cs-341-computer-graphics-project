@@ -49,3 +49,7 @@ func cubic_bezier(p0, p1, p2, p3, t):
 
 func interpolate(a, b, t):
 	return (1-t) * a + t * b;
+	
+func restart():
+	t1 = 0;
+	t2 = 0;
