@@ -27,8 +27,6 @@ func createOcean():
 		# Instanciate tile
 		var waterInstance = waterTile.instantiate();
 		
-		# Add to the scene
-		add_child(waterInstance);
 		
 		# set position, subdivision and scale
 		waterInstance.position = Vector3(spawnLocation.x, 0, spawnLocation.y) * waterInstance.mesh.size.x
@@ -39,6 +37,8 @@ func createOcean():
 		waterInstance.add_to_group("Water"); # to get the water meshes in the ui
 		
 		
+		# Add to the scene
+		add_child(waterInstance);
 	material = get_tree().get_first_node_in_group("Water").get_active_material(0);
 	
 
