@@ -35,7 +35,7 @@ material = SubResource("StandardMaterial3D_lo0y0")
 [node name="boat" type="RigidBody3D"]
 mass = 250.0
 center_of_mass_mode = 1
-center_of_mass = Vector3(0, -0.5, 0)
+center_of_mass = Vector3(0, 0.1, 0)
 script = ExtResource("1_gtp0f")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -115,7 +115,7 @@ process_material = SubResource("ParticleProcessMaterial_d10uv")
 draw_pass_1 = SubResource("QuadMesh_uajn1")
 
 [node name="GPUParticles3D8" type="GPUParticles3D" parent="floaters"]
-transform = Transform3D(-4.37114e-08, -0.29404, 0.955793, 0, 0.955793, 0.29404, -1, 1.28529e-08, -4.1779e-08, -3, 0, 0)
+transform = Transform3D(-4.37114e-08, -0.29404, 0.955793, 0, 0.955793, 0.29404, -1, 1.28529e-08, -4.1779e-08, -2.45651, 0, 0)
 emitting = false
 amount = 10
 lifetime = 0.45

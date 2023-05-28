@@ -64,7 +64,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 30, 0)
 
 [node name="bezier_camera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.89011, 0, 0)
-current = true
 script = ExtResource("7_318bf")
 
 [node name="rotating_camera" type="Camera3D" parent="."]
