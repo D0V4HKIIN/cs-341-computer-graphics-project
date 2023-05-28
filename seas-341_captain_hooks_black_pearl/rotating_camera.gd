@@ -7,7 +7,7 @@ var speedCircular = 0.5;
 
 var theta = 0.1;
 var dtheta = 2 * PI / 600;
-var r = 10;
+var r = 40;
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -21,8 +21,6 @@ func _process(_delta):
 
 func rotateAround(center, curr):
 	theta += dtheta;
-	if curr.position.distance_to(center.position) > 2. and curr.position.distance_to(center.position) < 12.:
-		r -= 0.05;
 	curr.position.x = center.position.x + r * cos(theta) * speedCircular;
-	curr.position.y = 8 + center.position.y;
+	curr.position.y = 35 + center.position.y;
 	curr.position.z = center.position.z + r * sin(theta) * speedCircular;

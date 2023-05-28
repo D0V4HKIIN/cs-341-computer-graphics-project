@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://vqwdgpeqmylb"]
+[gd_scene load_steps=14 format=3 uid="uid://vqwdgpeqmylb"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_3ycsj"]
 [ext_resource type="Shader" path="res://sky.gdshader" id="1_8mn5p"]
@@ -9,21 +9,19 @@
 [ext_resource type="PackedScene" uid="uid://dsk1f1citr7e2" path="res://Birds/birds.tscn" id="6_vrfpa"]
 [ext_resource type="Script" path="res://bezier_camera.gd" id="7_318bf"]
 [ext_resource type="Script" path="res://rotating_camera.gd" id="8_h4a2x"]
+[ext_resource type="Script" path="res://doubleBeizer_camera.gd" id="10_p0r42"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cb2s5"]
 shader = ExtResource("1_8mn5p")
 shader_parameter/skyColor = Color(0, 0.603922, 0.92549, 1)
-shader_parameter/add_clouds = true
-shader_parameter/clouds_below = false
-shader_parameter/cloud_scale = 0.25
-shader_parameter/speed = 0.021
-shader_parameter/cloud_dark = 0.32
-shader_parameter/cloud_light = 1.0
-shader_parameter/cloud_cover = 1.0
-shader_parameter/cloud_alpha = 5.85
-shader_parameter/sky_tint = 0.5
+shader_parameter/cloudColor = Color(1.4, 1.6, 0.9, 1)
+shader_parameter/addClouds = true
+shader_parameter/speed = 0.04
+shader_parameter/cloudLight = 0.3
+shader_parameter/cloudCover = 0.17
+shader_parameter/cloudWeight = 10.0
+shader_parameter/skyWeight = 0.401
 shader_parameter/height_offset = 0.304
-shader_parameter/sky_contribution = 0.5
 
 [sub_resource type="Sky" id="Sky_0uvdm"]
 sky_material = SubResource("ShaderMaterial_cb2s5")
@@ -73,3 +71,6 @@ script = ExtResource("8_h4a2x")
 update_mode = 1
 size = Vector3(1000, 1000, 1000)
 origin_offset = Vector3(0, 10, 0)
+
+[node name="doubleBeizer_camera" type="Camera3D" parent="."]
+script = ExtResource("10_p0r42")

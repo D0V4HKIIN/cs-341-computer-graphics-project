@@ -3,21 +3,24 @@ shader_type sky;
 render_mode use_half_res_pass;
 
 uniform vec4 skyColor: source_color;
-//uniform sampler2D source_panorama : filter_linear, source_color, hint_default_black;
-uniform bool add_clouds = true;
-uniform bool clouds_below = false;
-uniform float cloud_scale : hint_range(0.0, 1.0, 0.01) = 0.25;
+uniform vec4 cloudColor: source_color;
+uniform bool addClouds = true;
+
 uniform float speed : hint_range(0.0, 0.25, 0.001) = 0.002;
-uniform float cloud_dark : hint_range(0.0, 1.0, 0.01) = 0.5;
-uniform float cloud_light : hint_range(0.0, 1.0, 0.01) = 0.3;
-uniform float cloud_cover : hint_range(0.0, 1.0, 0.01) = 0.2;
-uniform float cloud_alpha : hint_range(0.0, 10.0, 0.01) = 8.0;
-uniform float sky_tint : hint_range(0.0, 1.0, 0.001) = 0.5;
+uniform float cloudLight : hint_range(0.0, 1.0, 0.01) = 0.3;
+uniform float cloudCover : hint_range(0.0, 1.0, 0.01) = 0.2;
+uniform float cloudWeight : hint_range(0.0, 10.0, 0.01) = 8.0;
+uniform float skyWeight : hint_range(0.0, 1.0, 0.001) = 0.5;
+
+// Height based on current pixel
 uniform float height_offset : hint_range(0.0, 1.0, 0.001) = 0.2;
-uniform float sky_contribution : hint_range(0.0, 1.0, 0.1) = 0.5;
 
-const mat2 m = mat2(vec2( 1.6, 1.2), vec2(-1.2, 1.6));
+// This matrix is scale both x and z axis by 2 and rotate 60 degrees
+const mat2 m = mat2(vec2(0, 2), vec2(-2, 0));
 
+// hash, noise are taken from this aritcle: https://greentec.github.io/shadertoy-fire-shader-en/#fbm
+// The hash and noise function implements the simplex noise which should produce similar
+// results as perlin noise but less computation intensive
 vec2 hash( vec2 p ) {
 	p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
 	return -1.0 + 2.0 * fract(sin(p) * 43758.5453123);
@@ -36,101 +39,86 @@ float noise( in vec2 p ) {
 	return dot(n, vec3(70.0));
 }
 
-float fbm(vec2 n) {
-	float total = 0.0, amplitude = 0.1;
-	for (int i = 0; i < 7; i++) {
-		total += noise(n) * amplitude;
-		n = m * n;
+// fbm is inspired by this documentation: https://thebookofshaders.com/13/
+float fbm(vec2 st) {
+	float value = 0.0;
+	float amplitude = 0.2;
+	for (int i = 0; i < 6; i++) {
+		value += amplitude * noise(st);
+		// apply both rotation and scale
+		st = m * st;
 		amplitude *= 0.4;
 	}
-	return total;
+	return value;
 }
 
 void sky() {
 	COLOR = skyColor.rgb;
-	if(AT_CUBEMAP_PASS){
-		COLOR *= sky_contribution;
-    }else if(add_clouds){
+	if (AT_CUBEMAP_PASS) {
+		COLOR = skyColor.rgb;
+	} else if (addClouds) {
 		vec3 normal = normalize(EYEDIR);
-		vec3 plane_intersect = normal / (normal.y + height_offset);
+		vec3 intersect = normal / (normal.y + height_offset);
 		
-		if(clouds_below){
-			plane_intersect = normal / -(normal.y - height_offset);
-		}
-		
-		vec2 p = plane_intersect.xz;
-		p.y *= -1.0;
+		vec2 p = intersect.xz;
 		vec2 uv = p;
 		
 		float time = TIME * speed;
-		float q = fbm(uv * cloud_scale * 0.5);
+		float q = fbm(uv * 0.5);
 		
-		//ridged noise shape
-		float r = 0.0;
-		uv *= cloud_scale;
-		uv -= q - time;
+		// the usage of abs comes from this article: https://medium.com/nerd-for-tech/generating-digital-worlds-using-perlin-noise-5d11237c29e9
+		// This add liveliness to the edge of noise
+		
+		// edge noise shape
+		float edgeShape = 0.0;
+		uv = p;
 		float weight = 0.8;
 		for(int i = 0; i < 8; i++){
-			r += abs(weight*noise( uv ));
-			uv = m*uv + time;
-			weight *= 0.7;
+			edgeShape += abs(weight * noise(uv));
+			uv = m * uv - time + q;
+			weight *= 0.5;
 		}
 		
-		//noise shape
-		float f = 0.0;
-		uv = p;
-		uv *= cloud_scale;
-		uv -= q - time;
-		weight = 0.7;
-		for(int i = 0; i < 8; i++){
-			f += weight*noise( uv );
-			uv = m*uv + time;
-			weight *= 0.6;
-		}
-		
-		f *= r + f;
-		
-		//noise colour
-		float c = 0.0;
-		time = TIME * speed * 2.0;
-		uv = p;
-		uv *= cloud_scale * 2.0;
-		uv -= q - time;
-		weight = 0.4;
-		for(int i = 0; i < 7; i++){
-			c += weight*noise( uv );
-			uv = m*uv + time;
-			weight *= 0.6;
-		}
-		
-		//noise ridge colour
-		float c1 = 0.0;
+		// noise edge colour
+		float edgeColor = 0.0;
 		time = TIME * speed * 3.0;
 		uv = p;
-		uv *= cloud_scale * 3.0;
-		uv -= q - time;
 		weight = 0.4;
-		for (int i = 0; i < 7; i++){
-			c1 += abs(weight*noise( uv ));
-			uv = m*uv + time;
-			weight *= 0.6;
+		for (int i = 0; i < 8; i++){
+			edgeColor += abs(weight * noise(uv));
+			uv = m * uv - time + q;
+			weight *= 0.5;
 		}
 		
-		c += c1;
+		// cloud main shape
+		float cloudShape = 0.0;
+		uv = p;
+		weight = 0.7;
+		for(int i = 0; i < 8; i++){
+			cloudShape += weight * noise(uv);
+			uv = m * uv - time + q;
+			weight *= 0.5;
+		}
+		
+		//noise colour
+		float color = 0.0;
+		time = TIME * speed * 2.0;
+		uv = p;
+		weight = 0.4;
+		for(int i = 0; i < 8; i++){
+			color += weight * noise(uv);
+			uv = m * uv - time + q;
+			weight *= 0.5;
+		}
+	
+		cloudShape += edgeShape;
+		color += edgeColor;
 		
 		vec3 skycolour = COLOR;
-		vec3 cloudcolour = vec3(1.4, 1.6, 0.9) * clamp((cloud_light * c), 0.0, 1.0);
-		float horizon_fall_off = max(normal.y, 0.0);
+		vec3 cloudFinalColour = cloudColor.rgb * clamp((cloudLight * color), 0.0, 1.0);
 		
-		if(clouds_below){
-			horizon_fall_off = max(-normal.y, 0.0);
-		}
+		cloudShape = cloudCover + cloudWeight * cloudShape * edgeShape;
 		
-		f = cloud_cover + cloud_alpha * f * r;
-		
-		vec3 result = mix(skycolour, clamp(sky_tint * skycolour + cloudcolour, 0.0, 1.0), clamp(f + c, 0.0, 1.0) * horizon_fall_off);
-		
-		// Convert the color to black and white.
-		COLOR =result;
+		COLOR = mix(skycolour, clamp(skyWeight * skycolour + cloudFinalColour, 0.0, 1.0), clamp(cloudShape + color, 0.0, 1.0) * normal.y);
 	}
 }
