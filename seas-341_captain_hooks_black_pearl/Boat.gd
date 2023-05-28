@@ -4,10 +4,8 @@ extends RigidBody3D
 @export var water_drag := 0.05
 @export var water_angular_drag := 0.05
 
-@export var SPEED = 0.1
-@export var ROTATION_SPEED = 0.02
-
-@export var splash_threshhold_speed = 1.0
+@export var SPEED = 7
+@export var ROTATION_SPEED = 1.1
 
 @onready var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
@@ -16,6 +14,8 @@ extends RigidBody3D
 
 @onready var ocean = $"../Ocean"
 
+@onready var flag = $"flag"
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	floater_depth.resize(floaters.size())
@@ -23,17 +23,19 @@ func _ready():
 var submerged = false;
 var boat_position_in_water = Vector2(0.0, 0.0);
 
-func _physics_process(_delta):
+func _physics_process(delta):
+	flag.rotation.y = -global_rotation.y + 3 * PI / 4 
+	
 	if Input.is_action_just_pressed("boat_reset"):
 		rotation = Vector3(PI, rotation.y, rotation.z);
 	
 	# Get the input direction and handle the movement/deceleration.
-	var input_dir = Input.get_vector("boat_forward", "boat_back", "boat_left", "boat_right").normalized()
- 
-	# rotate and set speed accordingly
-	rotate_y(-input_dir.y * ROTATION_SPEED)
+	var input_dir = Vector2(Input.get_axis("boat_forward", "boat_back"), Input.get_axis("boat_left", "boat_right"))
 	
-	var displaced = Vector2(cos(-rotation.y), sin(-rotation.y)) * input_dir.x * SPEED
+	# rotate and set speed accordingly
+	rotate_y(-input_dir.y * ROTATION_SPEED * delta)
+	
+	var displaced = Vector2(cos(-rotation.y), sin(-rotation.y)) * input_dir.x * SPEED * delta
 	boat_position_in_water += displaced
 	# move the water shader
 	for water in get_tree().get_nodes_in_group("Water"):
@@ -53,7 +55,7 @@ func _physics_process(_delta):
 			submerged = true
 			apply_force(Vector3.UP * float_force * gravity * sqrt(depth), floater.global_position - global_position)
 			
-			if(depth - floater_depth[index] > 0.01 && linear_velocity.y > splash_threshhold_speed):
+			if(delta * (depth - floater_depth[index]) > 0.5):
 				print(depth - floater_depth[index])
 				floater.emitting = true
 		

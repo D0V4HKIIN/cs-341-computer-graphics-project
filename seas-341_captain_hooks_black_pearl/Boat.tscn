@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://dauvp4g2i071q"]
+[gd_scene load_steps=14 format=3 uid="uid://dauvp4g2i071q"]
 
 [ext_resource type="Script" path="res://Boat.gd" id="1_gtp0f"]
 [ext_resource type="ArrayMesh" uid="uid://5ousbb8kaelo" path="res://ship_mesh_neph.obj" id="2_kjyen"]
 [ext_resource type="Texture2D" uid="uid://cjgxr8xtg448s" path="res://water_splash.png" id="3_tinjb"]
 [ext_resource type="Shader" path="res://flag.gdshader" id="4_yt2a3"]
+[ext_resource type="Texture2D" uid="uid://cnsl4g0cftab8" path="res://icon.svg" id="5_w3fa7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ahewb"]
 size = Vector3(4.8, 3.922, 2.15)
@@ -42,16 +43,18 @@ noise = SubResource("FastNoiseLite_gmdjh")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4cks3"]
 render_priority = 0
 shader = ExtResource("4_yt2a3")
-shader_parameter/uv_scale = Vector2(0.2, 0.1)
+shader_parameter/uv_scale = Vector2(0.1, 0.1)
 shader_parameter/time_scale = Vector2(0.3, 0)
-shader_parameter/distortion = 0.5
+shader_parameter/distortion = 0.0
 shader_parameter/noise = SubResource("NoiseTexture2D_866j0")
+shader_parameter/flag_texture = ExtResource("5_w3fa7")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_dgdb5"]
 material = SubResource("ShaderMaterial_4cks3")
 size = Vector2(3, 2)
 subdivide_width = 32
 subdivide_depth = 32
+center_offset = Vector3(1.5, 0, 0)
 
 [node name="boat" type="RigidBody3D"]
 mass = 250.0
@@ -153,6 +156,7 @@ transform = Transform3D(-2.18557e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.18557e-08, 
 mesh = ExtResource("2_kjyen")
 skeleton = NodePath("../floaters")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.25, 0, 0, 0, -1.09278e-08, -0.25, 0, 0.25, -1.09278e-08, 1.16688, 5.42832, 1.11022e-16)
+[node name="flag" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.25, 0, 0, 0, -1.09278e-08, -0.25, 0, 0.25, -1.09278e-08, 0.806181, 5.42832, 1.11022e-16)
+cast_shadow = 0
 mesh = SubResource("PlaneMesh_dgdb5")
