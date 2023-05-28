@@ -21,7 +21,7 @@ func _ready():
 func _process(delta):
 	look_at(target.position)
 	if t < 1:
-	t += speed * delta
+		t += speed * delta
 	position = cubic_bezier(p0, p1, p2, p3, t)
 
 func cubic_bezier(p0, p1, p2, p3, t):
