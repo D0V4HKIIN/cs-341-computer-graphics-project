@@ -45,7 +45,6 @@ float fbm(vec2 st) {
 	float amplitude = 0.2;
 	for (int i = 0; i < 6; i++) {
 		value += amplitude * noise(st);
-		// apply both rotation and scale
 		st = m * st;
 		amplitude *= 0.4;
 	}
@@ -66,8 +65,8 @@ void sky() {
 		float time = TIME * speed;
 		float q = fbm(uv * 0.5);
 		
-		// the usage of abs comes from this article: https://medium.com/nerd-for-tech/generating-digital-worlds-using-perlin-noise-5d11237c29e9
-		// This add liveliness to the edge of noise
+		// the usage of abs, which is turbulance comes from: https://thebookofshaders.com/13/
+		// This add liveliness to the edge of noise. 
 		
 		// edge noise shape
 		float edgeShape = 0.0;
@@ -75,7 +74,7 @@ void sky() {
 		float weight = 0.8;
 		for(int i = 0; i < 8; i++){
 			edgeShape += abs(weight * noise(uv));
-			uv = m * uv - time + q;
+			uv += m * uv + time + q;
 			weight *= 0.5;
 		}
 		
@@ -86,7 +85,7 @@ void sky() {
 		weight = 0.4;
 		for (int i = 0; i < 8; i++){
 			edgeColor += abs(weight * noise(uv));
-			uv = m * uv - time + q;
+			uv += m * uv + time + q;			
 			weight *= 0.5;
 		}
 		
@@ -96,7 +95,7 @@ void sky() {
 		weight = 0.7;
 		for(int i = 0; i < 8; i++){
 			cloudShape += weight * noise(uv);
-			uv = m * uv - time + q;
+			uv += m * uv + time + q;
 			weight *= 0.5;
 		}
 		
@@ -107,7 +106,7 @@ void sky() {
 		weight = 0.4;
 		for(int i = 0; i < 8; i++){
 			color += weight * noise(uv);
-			uv = m * uv - time + q;
+			uv += m * uv + time + q;
 			weight *= 0.5;
 		}
 	
