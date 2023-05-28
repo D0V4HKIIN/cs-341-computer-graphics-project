@@ -19,10 +19,10 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
- look_at(target.position)
- if t < 1:
-  t += speed * delta
-  position = cubic_bezier(p0, p1, p2, p3, t)
+	look_at(target.position)
+	if t < 1:
+	t += speed * delta
+	position = cubic_bezier(p0, p1, p2, p3, t)
 
 func cubic_bezier(p0, p1, p2, p3, t):
 	var q0 = interpolate(p0, p1, t)

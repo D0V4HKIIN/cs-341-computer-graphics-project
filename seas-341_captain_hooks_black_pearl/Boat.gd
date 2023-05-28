@@ -7,15 +7,18 @@ extends RigidBody3D
 @export var SPEED = 0.1
 @export var ROTATION_SPEED = 0.02
 
+@export var splash_threshhold_speed = 1.0
+
 @onready var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 @onready var floaters = $floaters.get_children()
+@onready var floater_depth : Array = Array()
 
 @onready var ocean = $"../Ocean"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	floater_depth.resize(floaters.size())
 
 var submerged = false;
 var boat_position_in_water = Vector2(0.0, 0.0);
@@ -43,13 +46,19 @@ func _physics_process(_delta):
 	
 	# buoyancy approximation
 	submerged = false
-	for floater in floaters:
-		
+	for index in range(floaters.size()):
+		var floater = floaters[index]
 		var depth = ocean.get_water_height(floater.global_position) - floater.global_position.y 
 		if depth > 0:
 			submerged = true
 			apply_force(Vector3.UP * float_force * gravity * sqrt(depth), floater.global_position - global_position)
 			
+			if(depth - floater_depth[index] > 0.01 && linear_velocity.y > splash_threshhold_speed):
+				print(depth - floater_depth[index])
+				floater.emitting = true
+		
+		floater_depth[index] = depth
+
 func _integrate_forces(state: PhysicsDirectBodyState3D):
 	if submerged:
 		state.linear_velocity *=  1 - water_drag
