@@ -40,9 +40,9 @@ alignment = 1
 layout_mode = 2
 text = "Hey! 
 Move Camera using WASD keys
-Move  Boat using arrow keys
+Move Boat using JKLI keys
 Flip boat using R
-To change camera use 1,2,3,4
+To change camera use 1,2,3,4,5
 -------------------------------------------------"
 
 [node name="wave height label" type="Label" parent="MarginContainer/VBoxContainer"]
