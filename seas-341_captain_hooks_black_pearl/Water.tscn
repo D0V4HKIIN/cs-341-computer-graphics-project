@@ -4,8 +4,7 @@
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_triiu"]
 size = Vector2(10, 10)
-subdivide_width = 49
-subdivide_depth = 49
+subdivide_depth = 10
 
 [node name="Water" type="MeshInstance3D"]
 mesh = SubResource("PlaneMesh_triiu")

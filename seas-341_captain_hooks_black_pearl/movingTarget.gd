@@ -1,7 +1,5 @@
 extends MeshInstance3D
 
-@onready var boat = $"../Boat"
-
 var p0 = Vector3(35, 20, 22);
 var p1 = Vector3(-10, 40, -20);
 var p2 = Vector3(10, 3, 0);
