@@ -1,18 +1,22 @@
-extends Camera3D
+extends MeshInstance3D
 
-@onready var target = $"./movingTarget"
+@onready var boat = $"../Boat"
 
-var p0 = Vector3(55, 25, 42);
-var p1 = Vector3(20, 15, 30);
-var p2 = Vector3(-30, 37, -20);
-var p3 = Vector3(10, 2, -10);
+var p0 = Vector3(35, 20, 22);
+var p1 = Vector3(-10, 40, -20);
+var p2 = Vector3(10, 3, 0);
+var p3 = Vector3(0, 0, 0);
 var t1 = 0
-var speed1 = 0.07
+var speed1 = 0.12
 
-var p4 = Vector3(20, 20, -20);
-var p5 = Vector3(30, 35, 0);
+var p4 = Vector3(20, 40, -20);
+var p5 = Vector3(0, 35, 0);
 var t2 = 0;
-var speed2 = 0.09;
+var speed2 = 0.15;
+
+var theta = 0;
+var dtheta = 2 * PI / 200;
+var r;
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -20,7 +24,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	look_at(target.position)
 	if t1 < 1:
 		t1 += speed1 * delta
 		position = cubic_bezier(p0, p1, p2, p3, t1)
@@ -31,7 +34,7 @@ func _process(delta):
 		else:
 			t1 = 0;
 			t2 = 0;
-	
+
 
 func cubic_bezier(p0, p1, p2, p3, t):
 	var q0 = interpolate(p0, p1, t)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://vqwdgpeqmylb"]
+[gd_scene load_steps=17 format=3 uid="uid://vqwdgpeqmylb"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_3ycsj"]
 [ext_resource type="Shader" path="res://sky.gdshader" id="1_8mn5p"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://bezier_camera.gd" id="7_318bf"]
 [ext_resource type="Script" path="res://rotating_camera.gd" id="8_h4a2x"]
 [ext_resource type="Script" path="res://doubleBeizer_camera.gd" id="10_p0r42"]
+[ext_resource type="Script" path="res://movingTarget.gd" id="11_cf4lo"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cb2s5"]
 shader = ExtResource("1_8mn5p")
@@ -32,6 +33,13 @@ sky = SubResource("Sky_0uvdm")
 reflected_light_source = 2
 tonemap_mode = 2
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rvn78"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0)
+
+[sub_resource type="SphereMesh" id="SphereMesh_dwmol"]
+material = SubResource("StandardMaterial3D_rvn78")
+
 [node name="Main" type="Node"]
 script = ExtResource("1_3ycsj")
 
@@ -44,7 +52,6 @@ shadow_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.820681, 0.571387, 0, -0.571387, 0.820681, 0, 17.3083, 21.6586)
-current = true
 script = ExtResource("1_far80")
 SHIFT_MULTIPLIER = 4.0
 SPEED = 4
@@ -73,4 +80,10 @@ size = Vector3(1000, 1000, 1000)
 origin_offset = Vector3(0, 10, 0)
 
 [node name="doubleBeizer_camera" type="Camera3D" parent="."]
+current = true
 script = ExtResource("10_p0r42")
+
+[node name="movingTarget" type="MeshInstance3D" parent="doubleBeizer_camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.1015, 23.1032, 42.1008)
+mesh = SubResource("SphereMesh_dwmol")
+script = ExtResource("11_cf4lo")
