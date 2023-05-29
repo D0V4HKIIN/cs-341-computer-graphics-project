@@ -6,6 +6,7 @@ extends Node
 @onready var rotating_camera = $"rotating_camera"
 @onready var doubleBeizer_camera = $"doubleBeizer_camera"
 @onready var moving_target = $"doubleBeizer_camera/movingTarget"
+@onready var ui = $"Control"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -26,3 +27,5 @@ func _process(delta):
 		doubleBeizer_camera.make_current();
 		doubleBeizer_camera.restart();
 		moving_target.restart();
+	if Input.is_action_just_pressed("hide_ui"):
+		ui.visible = !ui.visible

@@ -43,6 +43,7 @@ Move Camera using WASD keys
 Move Boat using JKLI keys
 Flip boat using R
 To change camera use 1,2,3,4,5
+Press h to hide ui
 -------------------------------------------------"
 
 [node name="wave height label" type="Label" parent="MarginContainer/VBoxContainer"]
