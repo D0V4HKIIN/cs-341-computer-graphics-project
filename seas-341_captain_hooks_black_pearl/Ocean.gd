@@ -98,7 +98,10 @@ func wave(time_pos, pos):
 
 	time_pos += Vector2.ONE * (noise.get_pixelv(pixel_pos).r * 2.0 - 1.0);
 	
-	var height_delta = noise2.get_pixelv(pos * noise_frequency).r * 0.2;
+	var uv_x_d = wrapf(pos.x * noise_frequency, 0, 1)
+	var uv_y_d = wrapf(pos.y * noise_frequency, 0, 1)
+	var pixel_pos_d = Vector2(uv_x_d * noise2.get_width(), uv_y_d * noise2.get_height())
+	var height_delta = noise2.get_pixelv(pixel_pos_d * noise_frequency).r * 0.2;
 	
 	var wv = 1 - abs(sin((time_pos.x + time_pos.y) * 0.8));
 	return pow(1.0 - pow(wv, 0.65), 4.0) + height_delta;
