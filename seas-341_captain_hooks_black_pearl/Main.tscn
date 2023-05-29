@@ -67,6 +67,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.230931, 1.33139, 0.0293784)
 
 [node name="birds" parent="." instance=ExtResource("6_vrfpa")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 30, 0)
+boidCount = 20
 
 [node name="bezier_camera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.89011, 0, 0)

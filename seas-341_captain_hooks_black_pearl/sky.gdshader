@@ -65,6 +65,9 @@ void sky() {
 		float time = TIME * speed;
 		float q = fbm(uv * 0.5);
 		
+		// We apply fbm on base noise twice to apply warping technology in order to 
+		// simulate cloud effect. The idea is based on cloud demo from: https://thebookofshaders.com/13/
+				
 		// the usage of abs, which is turbulance comes from: https://thebookofshaders.com/13/
 		// turbulence noise shape
 		float turbShape = 0.0;
