@@ -27,18 +27,17 @@ func createOcean():
 		# Instanciate tile
 		var waterInstance = waterTile.instantiate();
 		
-		
 		# set position, subdivision and scale
 		waterInstance.position = Vector3(spawnLocation.x, 0, spawnLocation.y) * waterInstance.mesh.size.x
-		waterInstance.mesh.set_subdivide_width(tileSubdivision);
-		waterInstance.mesh.set_subdivide_depth(tileSubdivision);
+		#waterInstance.mesh.set_subdivide_width(tileSubdivision);
+		#waterInstance.mesh.set_subdivide_depth(tileSubdivision);
 		waterInstance.set_scale(Vector3(tileScale, 1.0, tileScale)); # Ignore Y value because planes are 2d
 		
 		waterInstance.add_to_group("Water"); # to get the water meshes in the ui
 		
-		
 		# Add to the scene
 		add_child(waterInstance);
+		
 	material = get_tree().get_first_node_in_group("Water").get_active_material(0);
 	
 

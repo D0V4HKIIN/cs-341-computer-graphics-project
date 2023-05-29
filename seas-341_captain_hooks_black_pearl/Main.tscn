@@ -14,7 +14,7 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cb2s5"]
 shader = ExtResource("1_8mn5p")
-shader_parameter/skyColor = Color(0, 0.603922, 0.92549, 1)
+shader_parameter/skyColor = Color(0, 0.313726, 0.494118, 1)
 shader_parameter/cloudColor = Color(1.4, 1.6, 0.9, 1)
 shader_parameter/addClouds = true
 shader_parameter/speed = 0.04

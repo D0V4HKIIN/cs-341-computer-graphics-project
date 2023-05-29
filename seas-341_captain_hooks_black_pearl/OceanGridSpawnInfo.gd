@@ -22,7 +22,7 @@ extends Resource
 
 @export var subdivision : Array[int] = [
 	199,
-	99,
+	0,
 	99,
 	99,
 	99,
