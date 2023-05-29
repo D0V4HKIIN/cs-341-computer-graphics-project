@@ -37,8 +37,8 @@ varying vec2 vertex_pos;
 float wave(vec2 time_pos, vec2 pos){
 	// * 2.0 - 1.0 to make it in [-1, 1]
 	time_pos += texture(noise, time_pos * noise_frequency).x * 2.0 - 1.0;
-	float height_delta = (texture(noise2, pos * noise_frequency).x) * 0.2;
-	float wv = 1.0 - abs(sin(time_pos.x + time_pos.y));
+	float height_delta = texture(noise2, pos * noise_frequency).x * 0.2;
+	float wv = 1.0 - abs(sin((time_pos.x + time_pos.y) * 0.8));
 	return pow(1.0 - pow(wv, 0.65), 4.0) + height_delta;
 }
 
