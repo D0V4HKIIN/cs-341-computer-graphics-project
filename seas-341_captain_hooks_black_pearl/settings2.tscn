@@ -8,9 +8,9 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 22.0
-offset_top = 48.0
+offset_top = 102.0
 offset_right = -811.0
-offset_bottom = -347.0
+offset_bottom = -293.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_husos")
@@ -52,8 +52,8 @@ text = "wave height:
 
 [node name="wave_height slider" type="HSlider" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-max_value = 10.0
-step = 0.5
+max_value = 5.0
+step = 0.25
 value = 2.0
 
 [node name="wave speed label" type="Label" parent="MarginContainer/VBoxContainer"]
