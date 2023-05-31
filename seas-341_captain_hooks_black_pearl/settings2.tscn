@@ -44,6 +44,7 @@ Move Boat using JKLI keys
 Flip boat using R
 To change camera use 1,2,3,4,5
 Press h to hide ui
+Press f to toggle fullscreen
 -------------------------------------------------"
 
 [node name="wave height label" type="Label" parent="MarginContainer/VBoxContainer"]

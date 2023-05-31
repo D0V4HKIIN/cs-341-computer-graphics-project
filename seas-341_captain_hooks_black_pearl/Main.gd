@@ -29,3 +29,8 @@ func _process(delta):
 		moving_target.restart();
 	if Input.is_action_just_pressed("hide_ui"):
 		ui.visible = !ui.visible
+	if Input.is_action_just_pressed("toggle_fullscreen"):
+		if(DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN):
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		else:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)

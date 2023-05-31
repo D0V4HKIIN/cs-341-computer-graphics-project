@@ -8,7 +8,7 @@ uniform bool addClouds = true;
 
 uniform float speed : hint_range(0.0, 0.25, 0.001) = 0.002;
 uniform float cloudLight : hint_range(0.0, 1.0, 0.01) = 0.3;
-uniform float cloudCover : hint_range(0.0, 1.0, 0.01) = 0.2;
+uniform float cloudCover : hint_range(0.0, 1.0, 0.01) = 0.4;
 uniform float cloudWeight : hint_range(0.0, 10.0, 0.01) = 8.0;
 uniform float skyWeight : hint_range(0.0, 1.0, 0.001) = 0.5;
 
@@ -65,26 +65,27 @@ void sky() {
 		float time = TIME * speed;
 		float q = fbm(uv * 0.5);
 		
+		// We apply fbm on base noise twice to apply warping technology in order to 
+		// simulate cloud effect. The idea is based on cloud demo from: https://thebookofshaders.com/13/
+				
 		// the usage of abs, which is turbulance comes from: https://thebookofshaders.com/13/
-		// This add liveliness to the edge of noise. 
-		
-		// edge noise shape
-		float edgeShape = 0.0;
+		// turbulence noise shape
+		float turbShape = 0.0;
 		uv = p;
 		float weight = 0.8;
 		for(int i = 0; i < 8; i++){
-			edgeShape += abs(weight * noise(uv));
+			turbShape += abs(weight * noise(uv));
 			uv += m * uv + time + q;
 			weight *= 0.5;
 		}
 		
-		// noise edge colour
-		float edgeColor = 0.0;
+		// turbulence noise colour
+		float turbColor = 0.0;
 		time = TIME * speed * 3.0;
 		uv = p;
 		weight = 0.4;
 		for (int i = 0; i < 8; i++){
-			edgeColor += abs(weight * noise(uv));
+			turbColor += abs(weight * noise(uv));
 			uv += m * uv + time + q;			
 			weight *= 0.5;
 		}
@@ -99,7 +100,7 @@ void sky() {
 			weight *= 0.5;
 		}
 		
-		//noise colour
+		// cloud main colour
 		float color = 0.0;
 		time = TIME * speed * 2.0;
 		uv = p;
@@ -110,13 +111,13 @@ void sky() {
 			weight *= 0.5;
 		}
 	
-		cloudShape += edgeShape;
-		color += edgeColor;
+		cloudShape += turbShape;
+		color += turbColor;
 		
 		vec3 skycolour = COLOR;
 		vec3 cloudFinalColour = cloudColor.rgb * clamp((cloudLight * color), 0.0, 1.0);
 		
-		cloudShape = cloudCover + cloudWeight * cloudShape * edgeShape;
+		cloudShape = cloudCover + cloudWeight * (cloudShape + turbShape);
 		
 		COLOR = mix(skycolour, clamp(skyWeight * skycolour + cloudFinalColour, 0.0, 1.0), clamp(cloudShape + color, 0.0, 1.0) * normal.y);
 	}
