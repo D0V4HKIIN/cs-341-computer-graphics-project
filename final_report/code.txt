@@ -1,0 +1,921 @@
+==> bezier_camera.gd <==
+extends Camera3D
+
+@onready var target = $"../Boat"
+
+var p0 = Vector3(10, 10, 10);
+var p1 = Vector3(20, 0, -10);
+var p2 = Vector3(-10, 20, 20);
+var p3 = Vector3(-50, 20, 10);
+var t1 = 0
+var speed1 = 0.09
+
+var p4 = Vector3(30, 30, -20);
+var p5 = Vector3(-15, 35, -15);
+var t2 = 0;
+var speed2 = 0.13;
+
+var theta = 0;
+var dtheta = 2 * PI / 200;
+var r;
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass;
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	look_at(target.position)
+	
+	if t1 < 1:
+		t1 += speed1 * delta
+		position = cubic_bezier(p0, p1, p2, p3, t1)
+	else:
+		if t2 < 1:
+			t2 += speed2 * delta
+			position = cubic_bezier(p3, p5, p4, p0, t2)
+		else:
+			t1 = 0;
+			t2 = 0;
+
+
+func cubic_bezier(p0, p1, p2, p3, t):
+	var q0 = interpolate(p0, p1, t)
+	var q1 = interpolate(p1, p2, t)
+	var q2 = interpolate(p2, p3, t)
+	var r0 = interpolate(q0, q1, t)
+	var r1 = interpolate(q1, q2, t)
+	var s = interpolate(r0, r1, t)
+	return s
+
+func interpolate(a, b, t):
+	return (1-t) * a + t * b;
+	
+func restart():
+	t1 = 0;
+	t2 = 0;
+
+==> Boat.gd <==
+extends RigidBody3D
+
+@export var float_force := 55
+@export var water_drag := 0.05
+@export var water_angular_drag := 0.05
+
+var speed = Vector2(0., 0.)
+@export var ACCELERATION = 0.5
+@export var RESISTANCE = 0.9
+
+var rotational_speed = 0.
+@export var ROTATION_ACCELERATION = 0.1
+@export var ROTATION_RESISTANCE = 0.9
+
+@onready var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
+
+@onready var floaters = $floaters.get_children()
+@onready var floater_depth : Array = Array()
+
+@onready var ocean = $"../Ocean"
+
+@onready var flag = $"flag"
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	floater_depth.resize(floaters.size())
+
+var submerged = false;
+var boat_position_in_water = Vector2(0.0, 0.0);
+
+func _physics_process(delta):
+	flag.rotation.y = -global_rotation.y + 3 * PI / 4 
+	
+	if Input.is_action_just_pressed("boat_reset"):
+		rotation = Vector3(PI, rotation.y, rotation.z);
+	
+	# Get the input direction and handle the movement/deceleration.
+	var input_dir = Vector2(Input.get_axis("boat_forward", "boat_back"), Input.get_axis("boat_left", "boat_right"))
+	
+	rotational_speed += -input_dir.y * ROTATION_ACCELERATION
+	rotational_speed *= ROTATION_RESISTANCE
+	
+	# rotate and set speed accordingly
+	rotate_y(rotational_speed * delta)
+	
+	speed += Vector2(cos(-rotation.y), sin(-rotation.y)) * input_dir.x * ACCELERATION
+	speed *= RESISTANCE
+	boat_position_in_water += speed * delta
+	# move the water shader
+	for water in get_tree().get_nodes_in_group("Water"):
+		water.get_active_material(0).set("shader_parameter/water_displacement", boat_position_in_water);
+		water.get_active_material(0).set("shader_parameter/boat_rotation", rotation.y);
+	
+	# some nice debug code
+	#var water_height = get_water_height(Vector2(global_position.x, global_position.z) / 2  + Vector2.ONE * time * 0.05 + boat_position_in_water)
+	#global_position.y = water_height;
+	
+	# buoyancy approximation
+	submerged = false
+	for index in range(floaters.size()):
+		var floater = floaters[index]
+		var depth = ocean.get_water_height(floater.global_position) - floater.global_position.y 
+		if depth > 0:
+			submerged = true
+			apply_force(Vector3.UP * float_force * gravity * sqrt(depth), floater.global_position - global_position)
+			
+			if(delta * (depth - floater_depth[index]) > 0.0005):
+				var splash_speed = sqrt(delta * (depth - floater_depth[index]) * 4000)
+				floater.process_material.initial_velocity_max = splash_speed
+				floater.process_material.initial_velocity_max = splash_speed + 2
+				floater.emitting = true
+		
+		floater_depth[index] = depth
+
+func _integrate_forces(state: PhysicsDirectBodyState3D):
+	if submerged:
+		state.linear_velocity *=  1 - water_drag
+		state.angular_velocity *= 1 - water_angular_drag 
+
+==> DefaultCamera.gd <==
+extends Camera3D
+
+@export var SHIFT_MULTIPLIER = 3.5
+@export var SPEED = 2
+@export var SENSITIVITY = 0.002
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+func _input(event):
+	# Receives mouse motion
+	if event is InputEventMouseMotion and Input.is_action_pressed("move_camera"):
+		var mouse_movement = event.relative * SENSITIVITY
+		rotate_y(-mouse_movement.x)
+		rotate_object_local(Vector3(1,0,0), -mouse_movement.y)
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	# get input directions
+	var side_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	var vertical_dir = Input.get_axis("move_up", "move_down")
+	# create a 3d vector out of the inputs
+	var direction = Vector3(side_dir.x, -vertical_dir, side_dir.y)
+	
+	# check if speedup button is pressed
+	var speedup = 1.0
+	if Input.is_action_pressed("move_speedup"):
+		speedup = SHIFT_MULTIPLIER
+	
+	# compute velocity vec3
+	var velocity = direction * SPEED * speedup * delta
+	
+	# translate the camera by the velocity
+	translate(velocity)
+
+==> doubleBeizer_camera.gd <==
+extends Camera3D
+
+@onready var target = $"./movingTarget"
+
+var p0 = Vector3(55, 25, 42);
+var p1 = Vector3(20, 15, 30);
+var p2 = Vector3(-30, 37, -20);
+var p3 = Vector3(10, 2, -10);
+var t1 = 0
+var speed1 = 0.07
+
+var p4 = Vector3(20, 20, -20);
+var p5 = Vector3(30, 35, 0);
+var t2 = 0;
+var speed2 = 0.09;
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass;
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	look_at(target.position)
+	if t1 < 1:
+		t1 += speed1 * delta
+		position = cubic_bezier(p0, p1, p2, p3, t1)
+	else:
+		if t2 < 1:
+			t2 += speed2 * delta
+			position = cubic_bezier(p3, p5, p4, p0, t2)
+		else:
+			t1 = 0;
+			t2 = 0;
+	
+
+func cubic_bezier(p0, p1, p2, p3, t):
+	var q0 = interpolate(p0, p1, t)
+	var q1 = interpolate(p1, p2, t)
+	var q2 = interpolate(p2, p3, t)
+	var r0 = interpolate(q0, q1, t)
+	var r1 = interpolate(q1, q2, t)
+	var s = interpolate(r0, r1, t)
+	return s
+
+func interpolate(a, b, t):
+	return (1-t) * a + t * b;
+	
+func restart():
+	t1 = 0;
+	t2 = 0;
+
+==> Main.gd <==
+extends Node
+
+@onready var main_camera = $"Camera3D"
+@onready var boat_camera = $"Boat/Camera3D"
+@onready var bezier_camera = $"bezier_camera"
+@onready var rotating_camera = $"rotating_camera"
+@onready var doubleBeizer_camera = $"doubleBeizer_camera"
+@onready var moving_target = $"doubleBeizer_camera/movingTarget"
+@onready var ui = $"Control"
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	if Input.is_action_just_pressed("camera_1"):
+		main_camera.make_current();
+	if Input.is_action_just_pressed("camera_2"):
+		boat_camera.make_current();
+	if Input.is_action_just_pressed("camera_3"):
+		bezier_camera.make_current();
+		bezier_camera.restart();
+	if Input.is_action_just_pressed("camera_4"):
+		rotating_camera.make_current();
+	if Input.is_action_just_pressed("camera_5"):
+		doubleBeizer_camera.make_current();
+		doubleBeizer_camera.restart();
+		moving_target.restart();
+	if Input.is_action_just_pressed("hide_ui"):
+		ui.visible = !ui.visible
+	if Input.is_action_just_pressed("toggle_fullscreen"):
+		if(DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN):
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		else:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+
+==> movingTarget.gd <==
+extends MeshInstance3D
+
+var p0 = Vector3(35, 20, 22);
+var p1 = Vector3(-10, 40, -20);
+var p2 = Vector3(10, 3, 0);
+var p3 = Vector3(0, 0, 0);
+var t1 = 0
+var speed1 = 0.12
+
+var p4 = Vector3(20, 40, -20);
+var p5 = Vector3(0, 35, 0);
+var t2 = 0;
+var speed2 = 0.15;
+
+var theta = 0;
+var dtheta = 2 * PI / 200;
+var r;
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass;
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	if t1 < 1:
+		t1 += speed1 * delta
+		position = cubic_bezier(p0, p1, p2, p3, t1)
+	else:
+		if t2 < 1:
+			t2 += speed2 * delta
+			position = cubic_bezier(p3, p5, p4, p0, t2)
+		else:
+			t1 = 0;
+			t2 = 0;
+
+
+func cubic_bezier(p0, p1, p2, p3, t):
+	var q0 = interpolate(p0, p1, t)
+	var q1 = interpolate(p1, p2, t)
+	var q2 = interpolate(p2, p3, t)
+	var r0 = interpolate(q0, q1, t)
+	var r1 = interpolate(q1, q2, t)
+	var s = interpolate(r0, r1, t)
+	return s
+
+func interpolate(a, b, t):
+	return (1-t) * a + t * b;
+	
+func restart():
+	t1 = 0;
+	t2 = 0;
+
+==> Ocean.gd <==
+# makes the script run in the editor
+@tool
+
+extends Node3D
+
+# Get waterplane and preset grid spawn info
+var waterTile = preload("res://Water.tscn"); 
+var spawnPoint = preload("res://OceanGridSpawnInfo.tres");
+
+# Random
+var rng = RandomNumberGenerator.new();
+var random_number_xi;
+
+var material : Material;
+
+func getWater():
+	return get_tree().get_nodes_in_group("Water");
+
+# creates a bunch of water tiles and sets the position, subdivision and scale
+func createOcean():
+	for i in spawnPoint.spawnPoints.size():
+		# Get location, subdivision, and scale of each tile
+		var spawnLocation = spawnPoint.spawnPoints[i];
+		var tileSubdivision = spawnPoint.subdivision[i];
+		var tileScale = spawnPoint.scale[i];
+		
+		# Instanciate tile
+		var waterInstance = waterTile.instantiate();
+		
+		# set position, subdivision and scale
+		waterInstance.position = Vector3(spawnLocation.x, 0, spawnLocation.y) * waterInstance.mesh.size.x
+		#waterInstance.mesh.set_subdivide_width(tileSubdivision);
+		#waterInstance.mesh.set_subdivide_depth(tileSubdivision);
+		waterInstance.set_scale(Vector3(tileScale, 1.0, tileScale)); # Ignore Y value because planes are 2d
+		
+		waterInstance.add_to_group("Water"); # to get the water meshes in the ui
+		
+		# Add to the scene
+		add_child(waterInstance);
+		
+	material = get_tree().get_first_node_in_group("Water").get_active_material(0);
+	
+
+# Water shader varialbes
+var water_noise : NoiseTexture2D;
+var water_noise2 : NoiseTexture2D;
+var noise : Image
+var noise2 : Image
+var height_scale = 1;
+var wave_speed = 1;
+var noise_frequency = 1;
+
+func update_variables():
+	print("updating variables");
+	var tree = get_tree();
+	material = tree.get_first_node_in_group("Water").get_active_material(0);
+	
+	# noise_frequency
+	noise_frequency = material.get("shader_parameter/noise_frequency");
+	
+	# height_scale
+	height_scale = material.get("shader_parameter/height_scale");
+	
+	# wave speed
+	wave_speed = material.get("shader_parameter/wave_speed");
+	
+	# noise texture
+	water_noise = material.get("shader_parameter/noise");
+	water_noise2 = material.get("shader_parameter/noise2");
+	await water_noise.changed
+	await water_noise2.changed
+	noise = water_noise.get_image();
+	noise2 = water_noise2.get_image();
+
+# called when scene is instanciated
+func _ready():
+	seed(1);
+	random_number_xi = rng.randfn();
+	
+	createOcean();
+	
+	update_variables();
+
+var cpu_time = 0.0;
+func _process(delta):
+	# compute time so that it's the same in cpu and gpu
+	cpu_time += delta
+	
+	# set cpu_time
+	var tree = get_tree();
+	for water in tree.get_nodes_in_group("Water"):
+		water.get_active_material(0).set("shader_parameter/cpu_time", cpu_time);
+
+func wave(time_pos, pos):
+	var uv_x = wrapf(time_pos.x * noise_frequency, 0, 1)
+	var uv_y = wrapf(time_pos.y * noise_frequency, 0, 1)
+	var pixel_pos = Vector2(uv_x * noise.get_width(), uv_y * noise.get_height())
+
+	time_pos += Vector2.ONE * (noise.get_pixelv(pixel_pos).r * 2.0 - 1.0);
+	
+	var uv_x_d = wrapf(pos.x * noise_frequency, 0, 1)
+	var uv_y_d = wrapf(pos.y * noise_frequency, 0, 1)
+	var pixel_pos_d = Vector2(uv_x_d * noise2.get_width(), uv_y_d * noise2.get_height())
+	var height_delta = noise2.get_pixelv(pixel_pos_d * noise_frequency).r * 0.2;
+	
+	var wv = 1 - abs(sin((time_pos.x + time_pos.y) * 0.8));
+	return pow(1.0 - pow(wv, 0.65), 4.0) + height_delta;
+
+
+func noise_height(pos, time):
+	var d = wave((pos + Vector2.ONE * time) * 0.4, pos) * 0.3;
+	d += wave((pos + Vector2.ONE * time * 1.1) * 0.3, pos) * 0.3;
+	d += wave((pos + Vector2.ONE * time * 0.9) * 0.5, pos) * 0.2;
+	d += wave((pos + Vector2.ONE * time) * 0.6, pos) * 0.2;
+	return d * height_scale;
+
+
+func get_water_height(pos):
+	var boat_position_in_water = material.get("shader_parameter/water_displacement");	
+	var floater_tex_position = Vector2(pos.x, pos.z) / 2  + Vector2.ONE * cpu_time * wave_speed + boat_position_in_water;
+	if(noise == null):
+		return 0;
+	return noise_height(floater_tex_position, cpu_time);
+
+==> OceanGridSpawnInfo.gd <==
+extends Resource
+
+@export var spawnPoints : Array[Vector2] = [
+	Vector2(0,0),
+	Vector2(-1,-1),
+	Vector2(-1,0),
+	Vector2(-1,1),
+	Vector2(0,1),
+	Vector2(1,1),
+	Vector2(1,0),
+	Vector2(1,-1),
+	Vector2(0,-1),
+	Vector2(-3,-3),
+	Vector2(-3,0),
+	Vector2(-3,3),
+	Vector2(0,3),
+	Vector2(3,3),
+	Vector2(3,0),
+	Vector2(3,-3),
+	Vector2(0,-3),
+];
+
+@export var subdivision : Array[int] = [
+	199,
+	0,
+	99,
+	99,
+	99,
+	99,
+	99,
+	99,
+	99,
+	49,
+	49,
+	49,
+	49,
+	49,
+	49,
+	49,
+	49,
+];
+
+@export var scale : Array[int] = [
+	1,
+	1,
+	1,
+	1,
+	1,
+	1,
+	1,
+	1,
+	1,
+	3,
+	3,
+	3,
+	3,
+	3,
+	3,
+	3,
+	3,
+];
+
+==> rotating_camera.gd <==
+extends Camera3D
+
+@onready var target = $"../Boat"
+
+#var speedTowards : float = 2;
+var speedCircular = 0.5;
+
+var theta = 0.1;
+var dtheta = 2 * PI / 600;
+var r = 50;
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass;
+ 
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(_delta):
+	#var target_dir = (target.position - self.position).normalized()
+	rotateAround(target, self)
+	look_at(target.position)
+
+func rotateAround(center, curr):
+	theta += dtheta;
+	curr.position.x = center.position.x + r * cos(theta) * speedCircular;
+	curr.position.y = 35 + center.position.y;
+	curr.position.z = center.position.z + r * sin(theta) * speedCircular;
+
+==> settings2.gd <==
+extends Control
+
+@onready var ocean = $"../Ocean"
+@onready var noise_material = load("res://water_noise_based.gdshader");
+@onready var tessendorf_material = load("res://fft_shader.gdshader");
+
+@onready var birds = $"../birds"
+
+func change_wave_height(value):
+	for water in get_tree().get_nodes_in_group("Water"):
+		water.get_active_material(0).set("shader_parameter/height_scale", value);
+	ocean.update_variables();
+
+func change_wave_speed(value):
+	for water in get_tree().get_nodes_in_group("Water"):
+		water.get_active_material(0).set("shader_parameter/wave_speed", value);
+	ocean.update_variables();
+
+func change_birds(value):
+	birds.multimesh.set_instance_count(value);
+	birds.setup()
+
+==> fft_shader.gdshader <==
+shader_type spatial;
+
+const float g = 9.8;
+//const float PI = 3.14159265358979323846;
+varying float L_x;
+varying float L_y;
+
+const float M = 10.;
+const float N = 10.;
+
+uniform float cpu_time;
+uniform float A = 1.0; // "A is a numeric constant"
+uniform vec2 w = vec2(1.0); // wind
+
+varying float vertex_distance;
+varying float vertex_distance_clamped;
+varying vec2 vertex_pos;
+
+// random number generator
+float rand(vec2 co){
+	return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+// if need to work with complex numbers, since we cannot,
+// define the methods according to complex numbers
+
+vec2 ComplexMult(vec2 x, vec2 y) {
+    return vec2(x[0] * y[0] - x[1] * y[1], x[1] * y[0] + x[0] * y[1]);
+}
+ 
+vec2 iMult(vec2 z) {
+    return vec2(-z[1], z[0]);
+}
+
+vec2 euler(float value){
+	return vec2 (cos(value), sin(value));
+}
+
+// assume it's correct idk
+float dispersion(float n_prime, float m_prime){
+	float w_0 = 2.0 * PI / 200.0;
+	float kx = PI * (2.* n_prime - N) / L_x;
+	float kz = PI * (2.* m_prime - N) / L_y;
+	return floor(sqrt(g* sqrt(kx * kx + kz * kz)) / w_0) * w_0;
+}
+
+float phillips(float n_prime, float m_prime){
+	float L = length(w) * length(w) / g;
+	
+	float kx = PI * (2. * n_prime - N) / L_x;
+	float kz = PI * (2. * m_prime - M) / L_y;
+	float k = length(vec2(kx, kz));
+	
+	float dot_prod = dot(normalize(vec2(kx, kz)), normalize(w));
+	
+	float damping = 0.001;
+	float l2 = L * L * damping * damping;
+	
+	// euler (-k * k * l2) is some dampening part as in the original paper
+	return A * exp(-1.0 / pow((k * L), 2)) * dot_prod * dot_prod * exp(-k * k * l2) / pow(n_prime, 4);
+}
+
+
+vec2 h_0_bar(float n_prime, float m_prime, vec2 pos){
+	float xi_r = rand(pos);
+	float xi_i = rand(pos);
+
+	return vec2(xi_r, xi_i) * sqrt(phillips(n_prime,  m_prime) / sqrt(2));
+}
+
+
+vec2 height_tilde(float n_prime, float m_prime, float time, vec2 pos){
+	return h_0_bar(n_prime, m_prime, pos) * euler(dispersion(n_prime, m_prime) * time) + h_0_bar(n_prime, m_prime, pos) * euler(-dispersion(n_prime, m_prime) * time);
+}
+
+vec2 height(vec2 pos, float time) {
+	vec2 wave_height = vec2(0.0);
+	for (float m_prime = 0.; m_prime <=  M-1.; m_prime++){
+		for (float n_prime =0. ; n_prime <= N-1.; n_prime++){
+			float kx = PI * (2. * n_prime - N) / L_x;
+			float kz = PI * (2. * m_prime - M) / L_y;
+			wave_height += height_tilde(n_prime, m_prime, time, pos) * euler(pos.x * kx + pos.y *kz);
+		}
+	}
+	return wave_height;
+}
+
+//void displacement 
+
+//void normal
+
+void vertex() {
+	vec3 world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	VERTEX.y = height(world_pos.xz, cpu_time).x / 10000000000000000000.0;
+}
+
+
+void fragment(){
+	// normal water material
+	float fresnel = sqrt(1.0 - dot(NORMAL, VIEW));
+	RIM = 0.2;
+	METALLIC = 0.0;
+	ROUGHNESS = 0.01 * (1.0 - fresnel);
+	ALBEDO = vec3(0.01, 0.03, 0.05) + (0.1 * fresnel);
+}
+==> flag.gdshader <==
+shader_type spatial;
+render_mode cull_disabled;
+
+uniform sampler2D noise;
+uniform vec2 uv_scale = vec2(.1, .2);
+uniform vec2 time_scale = vec2(.2, .0);
+uniform float distortion = 0.;
+
+uniform sampler2D flag_texture;
+
+void vertex() {
+	vec2 flag_uv = UV * uv_scale - TIME * time_scale;
+	
+	float displacement = texture(noise, flag_uv).r * 2. - 1.; // normalized to [-1, 1]
+	displacement *= UV.x;
+	VERTEX.y += displacement;
+	VERTEX.x -= displacement * distortion;
+	VERTEX.z += displacement * distortion;
+}
+
+void fragment() {
+	ALBEDO = texture(flag_texture, UV).rgb;
+}
+==> sky.gdshader <==
+shader_type sky;
+
+render_mode use_half_res_pass;
+
+uniform vec4 skyColor: source_color;
+uniform vec4 cloudColor: source_color;
+uniform bool addClouds = true;
+
+uniform float speed : hint_range(0.0, 0.25, 0.001) = 0.002;
+uniform float cloudLight : hint_range(0.0, 1.0, 0.01) = 0.3;
+uniform float cloudCover : hint_range(0.0, 1.0, 0.01) = 0.4;
+uniform float cloudWeight : hint_range(0.0, 10.0, 0.01) = 8.0;
+uniform float skyWeight : hint_range(0.0, 1.0, 0.001) = 0.5;
+
+// Height based on current pixel
+uniform float height_offset : hint_range(0.0, 1.0, 0.001) = 0.2;
+
+// This matrix is scale both x and z axis by 2 and rotate 60 degrees
+const mat2 m = mat2(vec2(0, 2), vec2(-2, 0));
+
+// hash, noise are taken from this aritcle: https://greentec.github.io/shadertoy-fire-shader-en/#fbm
+// The hash and noise function implements the simplex noise which should produce similar
+// results as perlin noise but less computation intensive
+vec2 hash( vec2 p ) {
+	p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
+	return -1.0 + 2.0 * fract(sin(p) * 43758.5453123);
+}
+
+float noise( in vec2 p ) {
+	const float K1 = 0.366025404; // (sqrt(3)-1)/2;
+	const float K2 = 0.211324865; // (3-sqrt(3))/6;
+	vec2 i = floor(p + (p.x + p.y)*K1);
+	vec2 a = p - i + (i.x + i.y) * K2;
+	vec2 o = (a.x > a.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+	vec2 b = a - o + K2;
+	vec2 c = a - 1.0 + 2.0 * K2;
+	vec3 h = max(0.5 - vec3(dot(a, a), dot(b, b), dot(c, c)), 0.0 );
+	vec3 n = h * h * h * h * vec3(dot(a, hash(i + 0.0)), dot(b, hash(i + o)), dot(c, hash(i + 1.0)));
+	return dot(n, vec3(70.0));
+}
+
+// fbm is inspired by this documentation: https://thebookofshaders.com/13/
+float fbm(vec2 st) {
+	float value = 0.0;
+	float amplitude = 0.2;
+	for (int i = 0; i < 6; i++) {
+		value += amplitude * noise(st);
+		st = m * st;
+		amplitude *= 0.4;
+	}
+	return value;
+}
+
+void sky() {
+	COLOR = skyColor.rgb;
+	if (AT_CUBEMAP_PASS) {
+		COLOR = skyColor.rgb;
+	} else if (addClouds) {
+		vec3 normal = normalize(EYEDIR);
+		vec3 intersect = normal / (normal.y + height_offset);
+		
+		vec2 p = intersect.xz;
+		vec2 uv = p;
+		
+		float time = TIME * speed;
+		float q = fbm(uv * 0.5);
+		
+		// We apply fbm on base noise twice to apply warping technology in order to 
+		// simulate cloud effect. The idea is based on cloud demo from: https://thebookofshaders.com/13/
+				
+		// the usage of abs, which is turbulance comes from: https://thebookofshaders.com/13/
+		// turbulence noise shape
+		float turbShape = 0.0;
+		uv = p;
+		float weight = 0.8;
+		for(int i = 0; i < 8; i++){
+			turbShape += abs(weight * noise(uv));
+			uv += m * uv + time + q;
+			weight *= 0.5;
+		}
+		
+		// turbulence noise colour
+		float turbColor = 0.0;
+		time = TIME * speed * 3.0;
+		uv = p;
+		weight = 0.4;
+		for (int i = 0; i < 8; i++){
+			turbColor += abs(weight * noise(uv));
+			uv += m * uv + time + q;			
+			weight *= 0.5;
+		}
+		
+		// cloud main shape
+		float cloudShape = 0.0;
+		uv = p;
+		weight = 0.7;
+		for(int i = 0; i < 8; i++){
+			cloudShape += weight * noise(uv);
+			uv += m * uv + time + q;
+			weight *= 0.5;
+		}
+		
+		// cloud main colour
+		float color = 0.0;
+		time = TIME * speed * 2.0;
+		uv = p;
+		weight = 0.4;
+		for(int i = 0; i < 8; i++){
+			color += weight * noise(uv);
+			uv += m * uv + time + q;
+			weight *= 0.5;
+		}
+	
+		cloudShape += turbShape;
+		color += turbColor;
+		
+		vec3 skycolour = COLOR;
+		vec3 cloudFinalColour = cloudColor.rgb * clamp((cloudLight * color), 0.0, 1.0);
+		
+		cloudShape = cloudCover + cloudWeight * (cloudShape + turbShape);
+		
+		COLOR = mix(skycolour, clamp(skyWeight * skycolour + cloudFinalColour, 0.0, 1.0), clamp(cloudShape, 0.0, 1.0) * normal.y);
+	}
+}
+==> water_noise_based.gdshader <==
+shader_type spatial;
+render_mode specular_toon;
+
+uniform vec2 water_displacement; // to simulate the water without actually moving the boat
+uniform float cpu_time; // so that we have the same time in gpu and cpu
+
+// variables that affect the water
+uniform float height_scale;
+uniform float noise_frequency;
+uniform float wave_speed;
+uniform float foam_height = 0.5;
+uniform float foam_weight = 0.1;
+uniform float max_seam_compensation = 500.;
+
+uniform float boat_length;
+uniform float boat_width;
+uniform float boat_rotation;
+uniform float boat_wave_height;
+uniform float boat_wave_width;
+
+
+uniform sampler2D noise;
+uniform sampler2D noise2;
+uniform sampler2D normalmap;
+uniform sampler2D white_water_noise;
+
+uniform vec3 color1 : source_color;
+uniform vec3 color2 : source_color;
+
+varying vec2 tex_position;
+varying float scaling;
+
+varying float vertex_distance;
+varying float vertex_distance_clamped;
+varying vec2 vertex_pos;
+
+float wave(vec2 time_pos, vec2 pos){
+	// * 2.0 - 1.0 to make it in [-1, 1]
+	time_pos += texture(noise, time_pos * noise_frequency).x * 2.0 - 1.0;
+	float height_delta = texture(noise2, pos * noise_frequency).x * 0.2;
+	float wv = 1.0 - abs(sin((time_pos.x + time_pos.y) * 0.8));
+	return pow(1.0 - pow(wv, 0.65), 4.0) + height_delta;
+}
+
+float height(vec2 position, float time) {
+	float d = wave((position + time) * 0.4, position) * 0.3;
+	d += wave((position + time * 1.1) * 0.3, position) * 0.3;
+	d += wave((position + time * 0.9) * 0.5, position) * 0.2;
+	d += wave((position + time) * 0.6, position) * 0.2;
+	return d * height_scale;
+}
+
+float fresnel(float amount, vec3 normal, vec3 view) {
+	return pow((1.0 - clamp(dot(normalize(normal), normalize(view)), 0.0, 1.0)), amount);
+}
+
+// square
+float sq(float x){
+	return x*x;
+}
+
+void vertex() {
+	vec3 world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	tex_position = world_pos.xz / 2.0 + cpu_time * wave_speed + water_displacement;
+	
+	vertex_distance = distance(world_pos, vec3(0.0));
+	vertex_distance = clamp(vertex_distance, 0.0, max_seam_compensation);
+	vertex_distance_clamped = vertex_distance / max_seam_compensation;
+	
+	scaling = 1.0 - vertex_distance_clamped;
+	float R = 3.5;
+	float r = boat_wave_width;
+	float h = height(tex_position, cpu_time);
+	
+	//mat2 world_to_boat_space = mat2(vec2(cos(boat_rotation), -sin(boat_rotation)), vec2(sin(boat_rotation), cos(boat_rotation)));
+	//vec2 boat_space = world_pos.xz * world_to_boat_space;
+	
+	//float boat_wave_factor = sqrt(max(-0.2 * (boat_space.x - 3. - boat_length), 0.));
+	// add half torus for boat
+	//h += boat_wave_factor * boat_wave_height * sqrt(max(sq(r) - sq(sqrt(sq((1./boat_length) * boat_space.x) + sq((1./boat_width) * boat_space.y)) - R), 0.));
+
+	VERTEX.y += h * scaling;
+
+	NORMAL = normalize(vec3(h - height(tex_position + vec2(0.1, 0.0), cpu_time), 0.1, h - height(tex_position + vec2(0.0, 0.1), cpu_time)));
+}
+
+void fragment() {
+	// noise to make water less plastic like
+	vec3 normal_noise = texture(normalmap, tex_position).xyz;
+	NORMAL_MAP = normal_noise;
+	
+	vec3 world_vertex = (INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	
+	float fresnel = fresnel(5.0, NORMAL, VIEW);
+	vec3 surface_color = mix(color1, color2, fresnel);
+	// normal water material
+	RIM = 0.2;
+	METALLIC = 0.0;
+	ROUGHNESS = 0.01 * (1.0 - fresnel);
+	
+	// white water
+	float height_above_white_water = world_vertex.y - height_scale * scaling * foam_height;
+	if(height_above_white_water > 0.){
+		surface_color += texture(white_water_noise, tex_position).xyz * foam_weight * height_above_white_water * 9.;
+		ROUGHNESS = 0.1;
+	}
+	
+	ALBEDO = surface_color;
+}
