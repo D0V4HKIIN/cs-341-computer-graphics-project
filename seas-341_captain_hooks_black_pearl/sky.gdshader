@@ -119,6 +119,6 @@ void sky() {
 		
 		cloudShape = cloudCover + cloudWeight * (cloudShape + turbShape);
 		
-		COLOR = mix(skycolour, clamp(skyWeight * skycolour + cloudFinalColour, 0.0, 1.0), clamp(cloudShape + color, 0.0, 1.0) * normal.y);
+		COLOR = mix(skycolour, clamp(skyWeight * skycolour + cloudFinalColour, 0.0, 1.0), clamp(cloudShape, 0.0, 1.0) * normal.y);
 	}
 }
